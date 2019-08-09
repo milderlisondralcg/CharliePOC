@@ -1,0 +1,45 @@
+<html>
+<style type="text/css">
+ a:hover {
+  cursor:pointer;
+ }
+ body {
+	font-family: Helvetica;
+	font-size: 10pt;
+ }
+</style>
+<body>
+
+<div>
+ <a class="product" rel="1819">1550 nm PM Gyroscope & Sensor Fiber</a><br/><br/>
+ <a class="product" rel="52">Genesis Lasers</a><br/><br/>
+ <a class="product" rel="61">Genesis Taipan 607 nm to 639 nm</a><br/><br/>
+</div>
+<h3>Product Detail</h3>
+<div class="product-detail">
+	
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+	
+		$(".product").click(function(){
+			var product_id = $(this).attr("rel");
+			var endpoint = "/api/?action=get-product-detail&id=" + product_id;
+			$.post(endpoint,function(data){
+
+				var html = "";
+				for (var key in data) {
+				if (data.hasOwnProperty(key)) {
+					//console.log(key + " -> " + data[key]);
+					html += key + " :: " + data[key] + "<br/>";
+				}
+				$(".product-detail").html(html);
+	}
+				
+			},"json");
+		});
+	});
+</script>
+</body>
+</html>

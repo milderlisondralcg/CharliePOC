@@ -1,0 +1,43 @@
+﻿@model DMP.Models.ViewModel.UserLoginView
+
+@{
+    ViewBag.Title = "LogIn";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="login-form-container">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div>
+            @Html.ValidationSummary(true, "")
+
+            <div>
+                @Html.LabelFor(model => model.LoginName)
+
+                <div>
+                    @Html.EditorFor(model => model.LoginName)
+                    @Html.ValidationMessageFor(model => model.LoginName, "")
+                </div>
+            </div>
+
+            <div>
+                @Html.LabelFor(model => model.Password)
+
+                <div>
+                    @Html.EditorFor(model => model.Password)
+                    @Html.ValidationMessageFor(model => model.Password, "")
+                </div>
+            </div>
+
+            <div>
+                <div>
+                    <input type="submit" value="Login" />
+                    @Html.ActionLink("Register for an account", "AddUser", "Account")
+                </div>
+            </div>
+        </div>
+    }
+</div>
+ 

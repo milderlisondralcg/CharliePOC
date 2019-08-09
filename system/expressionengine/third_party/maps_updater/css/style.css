@@ -1,0 +1,145 @@
+/*
+ * @Author: Universal Programming 
+ * @Date: 2018-03-12
+ * @Package: Maps_updater
+ * @Copywrite: 2018 Universal Programming LLC
+ * @Last Modified date: 2018-05-14
+ * 
+ */
+.col1{
+    width: 3%;
+}
+.col2{
+    width:10%;
+}
+.col3{
+    width: 27%;
+}
+.col4{
+    width: 21.1%;
+}
+.col5{
+    width:4%;
+}
+.col6{
+    width:8%;
+}
+.col7{
+    width:31%;
+}
+#tab-content *{
+    font-size: 11px;
+}
+#mainContent .pageContents{
+    overflow: unset !important;
+}
+.glyphicon.glyphicon-map-marker {
+    font-size: 25px;
+}
+.googleAddress{
+    width:400px !important;
+    position:absolute;
+    z-index: 99999999;
+    -webkit-box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);
+}
+.formButtons{
+    position: fixed;
+    bottom:0px;
+    right:0px;
+    margin:39px;
+    z-index: 99998;
+}
+.formButtons button{
+    -webkit-box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 6px 3px rgba(0,0,0,0.75);
+    margin-left:5px;
+}
+.updateProvider input[type=text]{
+    border: 1px solid #cccccc;
+    padding: 6px 12px;
+    display: inline-block;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}
+.saveAttr{
+    display:inline-block;
+}
+#mapAttributesCategories tr td input{
+    display: inline-block;
+}
+#mapAttributesProducts tr td input{
+    display: inline-block;
+}
+#deletePopContainer{
+    top:0;
+    left: 0;
+    position: fixed;
+    width:100%;
+    height:100%;
+    z-index: 99999999999999999999999999;
+}
+#deletePop{
+    position: absolute;
+    top: 50%;
+    left:50%;
+    transform: translateY(-50%) translateX(-50%);
+    width: 100%;
+    padding:10px;
+    margin: auto;
+    color: white;
+    background-color: #d91350;
+    -webkit-box-shadow: 0px 0px 44px 4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 44px 4px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 44px 4px rgba(0,0,0,0.75);
+}
+.providersWarning{
+    display: none;
+    position: fixed;
+    width:35%;
+    padding: 10px;
+    text-align: center;
+    bottom: 5%;
+    right: 5%;
+    color: white;
+    background-color: #d91350;
+    z-index: 99999999999999999999999999;
+    -webkit-box-shadow: 0px 0px 44px 4px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 44px 4px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 44px 4px rgba(0,0,0,0.75);
+}
+.modal {
+    display:    none;
+    position:   fixed;
+    z-index:    1000;
+    top:        0;
+    left:       0;
+    height:     100%;
+    width:      100%;
+    background: rgba( 255, 255, 255, .8 ) 
+                url('/system/expressionengine/third_party/maps_updater/css/ui/FhHRx.gif') 
+                50% 50% 
+                no-repeat;
+}
+body.loading .modal {
+    overflow: hidden;   
+}
+body.loading .modal {
+    display: block;
+}
+
+.col-xs-1, .col-xs-2, .col-xs-6{
+	width:auto;
+}

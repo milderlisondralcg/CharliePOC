@@ -1,0 +1,206 @@
+﻿@model DMP.Models.ViewModel.AddLeadsView
+
+@{
+    Layout = null;
+}
+<html>
+<head>
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/themes/base/all.css" rel="stylesheet" />
+    <style>
+       #main{
+            margin: 50px 50px 0px 100px;
+       }
+    </style>
+</head>
+<body>
+    <div id="main">
+<br /><br />
+Please fill out the form below so that you can download the document
+<br/>
+@ViewBag.DocTitle
+@using (Html.BeginForm())
+{
+
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Phone, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+       
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Country, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Country, new List<SelectListItem> {
+                    new SelectListItem { Text="-- Select a Country --", Value="" },
+                    new SelectListItem { Text="United States", Value="United States" },
+                    new SelectListItem { Text="Albania", Value="Albania" },
+                    new SelectListItem { Text="Argentina", Value="Argentina" },
+                    new SelectListItem { Text="Armenia", Value="Armenia" },
+                    new SelectListItem { Text="Aruba", Value="Aruba" },
+                    new SelectListItem { Text="Australia", Value="Australia" },
+                    new SelectListItem { Text="Austria", Value="Austria" },
+                    new SelectListItem { Text="Azerbaijan", Value="Azerbaijan" },
+                    new SelectListItem { Text="Bahrain", Value="Bahrain" },
+                    new SelectListItem { Text="Beijing", Value="Beijing" },
+                    new SelectListItem { Text="Belarus", Value="Belarus" },
+                    new SelectListItem { Text="Belgium", Value="Belgium" },
+                    new SelectListItem { Text="Bosnia", Value="Bosnia" },
+                    new SelectListItem { Text="Brazil", Value="Brazil" },
+                    new SelectListItem { Text="Brunei", Value="Brunei" },
+                    new SelectListItem { Text="Bulgaria", Value="Bulgaria" },
+                    new SelectListItem { Text="Chile", Value="Chile" },
+                    new SelectListItem { Text="China", Value="China" },
+                    new SelectListItem { Text="Croatia", Value="Croatia" },
+                    new SelectListItem { Text="Cyprus", Value="Cyprus" },
+                    new SelectListItem { Text="Czech Republic", Value="Czech Republic" },
+                    new SelectListItem { Text="Denmark", Value="Denmark" },
+                    new SelectListItem { Text="Estonia", Value="Estonia" },
+                    new SelectListItem { Text="Finland", Value="Finland" },
+                    new SelectListItem { Text="France", Value="France" },
+                    new SelectListItem { Text="Georgia", Value="Georgia" },
+                    new SelectListItem { Text="Germany", Value="Germany" },
+                    new SelectListItem { Text="Greece", Value="Greece" },
+                    new SelectListItem { Text="Hong Kong", Value="Hong Kong" },
+                    new SelectListItem { Text="Hungary", Value="Hungary" },
+                    new SelectListItem { Text="Iceland", Value="Iceland" },
+                    new SelectListItem { Text="India", Value="India" },
+                    new SelectListItem { Text="Indonesia", Value="Indonesia" },
+                    new SelectListItem { Text="Iraq", Value="Iraq" },
+                    new SelectListItem { Text="Ireland", Value="Ireland" },
+                    new SelectListItem { Text="Israel", Value="Israel" },
+                    new SelectListItem { Text="Italy", Value="Italy" },
+                    new SelectListItem { Text="Japan", Value="Japan" },
+                    new SelectListItem { Text="Jordan", Value="Jordan" },
+                    new SelectListItem { Text="Kazakhstan", Value="Kazakhstan" },
+                    new SelectListItem { Text="Korean", Value="Korea" },
+                    new SelectListItem { Text="Kuwait", Value="Kuwait" },
+                    new SelectListItem { Text="Kyrgyzstan", Value="Kyrgyzstan" },                    
+                    new SelectListItem { Text="Latvia", Value="Latvia" },
+                    new SelectListItem { Text="Lebanon", Value="Lebanon" },
+                    new SelectListItem { Text="Lithuania", Value="Lithuania" },
+                    new SelectListItem { Text="Luxembourg", Value="Luxembourg" },
+                    new SelectListItem { Text="Macedonia", Value="Macedonia" },
+                    new SelectListItem { Text="Malaysia", Value="Malaysia" },
+                    new SelectListItem { Text="Mexico", Value="Mexico" },
+                    new SelectListItem { Text="Moldova", Value="Moldova" },
+                    new SelectListItem { Text="Netherlands", Value="Netherlands" },
+                    new SelectListItem { Text="New Zealand", Value="New Zealand" },
+                    new SelectListItem { Text="Northern Ireland", Value="Northern Ireland" },
+                    new SelectListItem { Text="Norway", Value="Norway" },
+                    new SelectListItem { Text="Oman", Value="Oman" },
+                    new SelectListItem { Text="Pakistan", Value="Pakistan" },
+                    new SelectListItem { Text="Philippines", Value="Philippines" },
+                    new SelectListItem { Text="Poland", Value="Poland" },
+                    new SelectListItem { Text="Portugal", Value="Portugal" },
+                    new SelectListItem { Text="Qatar", Value="Qatar" },
+                    new SelectListItem { Text="Romania", Value="Romania" },
+                    new SelectListItem { Text="Russia", Value="Russia" },
+                    new SelectListItem { Text="Saudi Arabia", Value="Saudi Arabia" },
+                    new SelectListItem { Text="Scotland", Value="Scotland" },
+                    new SelectListItem { Text="Serbia and Montenegro", Value="Serbia and Montenegro" },
+                    new SelectListItem { Text="Singapore", Value="Singapore" },
+                    new SelectListItem { Text="Slovakia", Value="Slovakia" },
+                    new SelectListItem { Text="Slovenia", Value="Slovenia" },
+                    new SelectListItem { Text="South Africa", Value="South Africa" },
+                    new SelectListItem { Text="Spain", Value="Spain" },
+                    new SelectListItem { Text="Sweden", Value="Sweden" },
+                    new SelectListItem { Text="Switzerland", Value="Switzerland" },
+                    new SelectListItem { Text="Taiwan", Value="Taiwan" },
+                    new SelectListItem { Text="Tajikistan", Value="Tajikistan" },
+                    new SelectListItem { Text="Thailand", Value="Thailand" },
+                    new SelectListItem { Text="Turkey", Value="Turkey" },
+                    new SelectListItem { Text="Turkmenistan", Value="Turkmenistan" },
+                    new SelectListItem { Text="Ukraine", Value="Ukraine" },                   
+                    new SelectListItem { Text="United Arab Emirates", Value="United Arab Emirates" },
+                    new SelectListItem { Text="United Kingdom", Value="United Kingdom" },
+                    new SelectListItem { Text="United States", Value="United States" },
+                    new SelectListItem { Text="Uruguay", Value="Uruguay" },
+                    new SelectListItem { Text="Uzbekistan", Value="Uzbekistan" },
+                    new SelectListItem { Text="Vietnam", Value="Vietnam" },
+                    new SelectListItem { Text="Yemen", Value="Yemen" },
+                }, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Country, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Organization, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Organization, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Organization, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+           <div class="col-md-10">
+                <input type="checkbox" id="preauthorize" name="preauthorize" value="yes" /> Save my information
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Submit" id="submit_btn" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" name="IPAddress" id="IPAddress" value="" />
+    <input type="hidden" name="DocId" id="DocId" value="@ViewBag.DocId" />
+}
+
+</div>
+
+<script src="~/Scripts/jquery-1.12.4.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script type="text/javascript">
+    function getIP(json) {
+        console.log(json.ip);
+        $("#IPAddress").val(json.ip);
+    }
+    
+</script>
+<script type="text/javascript" src="http://api.ipify.org?format=jsonp&callback=getIP"></script>
+
+    </body>
+</html>

@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="coherent" Class="DataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=SF-MILISO-T530\SQLEXPRESS01;Initial Catalog=coherent;Integrated Security=True;MultipleActiveResultSets=True;Application Name=EntityFramework" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="coherentConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.ViewLeadsDownloads" Member="ViewLeadsDownloads">
+    <Type Name="ViewLeadsDownload">
+      <Column Name="FirstName" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="LastName" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="CreatedDatetime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="SFExport" Type="System.String" DbType="Char(10)" CanBeNull="true" />
+      <Column Name="DocumentTitle" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="DocumentId" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="UserIpAddress" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>

@@ -1,0 +1,10 @@
+﻿
+@{
+    ViewBag.Title = "AdminOnly";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="divUserListContainer">
+    @Html.Action("ManageUserPartial", "Home"); <!-- Load the partial view into this main view -->
+</div>  
+

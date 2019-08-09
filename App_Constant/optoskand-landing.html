@@ -1,0 +1,88 @@
+<html>
+<head>
+<link rel="stylesheet" href="../assets/css/normalize.min.css?v=148">
+<link rel="stylesheet" href="../assets/css/style.min.css?v=148">
+<script src="../_admin_mm/includes/js/jquery-3.3.1.min.js"></script>
+</head>
+<body>
+<p>&nbsp;</p>
+
+<div id="notification"></div>
+<br/><br/>
+	<div class="" style="max-width:100%;width:100%;display:none;" id="passcode_form_contaner">
+		<form id="passcode_form" name="passcode_form" method="post">
+			<label for="Company">email *</label>
+			<input id="email" type="email" name="email" maxlength="100"  value="" required>
+
+			<label for="passcode">passcode *</label>
+			<input id="passcode" type="Text" name="passcode" maxlength="200"value="" required>
+			<!-- <input type="hidden" name="XID" value="{XID_HASH}" /> -->
+			<input type="hidden" name="action" value="validate_passcode">
+			<input type="submit" value="Submit" name="submit">
+		<form>
+	</div>
+
+
+<div id="media"></div>
+
+<script>
+	var controller = '/App_Constant/mfa/';
+	$(document).ready(function(){
+		// Check to see if browser has a valid Cookie
+		//$.get( controller, { action: "check_cookie_exists" }, function( data ){
+			//if( data.valid == true ){
+				//$("#media").load("/App_Constant/optoskand.html");
+				//$("#passcode_form_contaner").hide();		
+			//}else{
+				var key = getUrlVars()["key"];
+				
+				if (typeof key === 'undefined' || key === null) { 
+					$("#notification").html("Please submit your email address and the passcode that was given to you buy our Support Staff");
+					$("#passcode_form_contaner").show();
+				}else{				
+					//check for existing cookie
+					$.post( controller, { action: "check_given_cookie", key: key }, function( data ) {
+						if(data.valid == true){
+							$("#media").load("/App_Constant/optoskand.html");
+							$("#passcode_form_contaner").hide();
+						}else{ 
+							if (typeof key === undefined || key === null) { console.log("undefined");
+								$("#notification").html("Please submit your email address and the passcode that was given to you buy our Support Staff");
+							}
+							$("#passcode_form_contaner").show();
+						}
+					}, "json" );
+				}		
+			//}
+		//},"json");
+		
+
+	});
+	
+	$("#passcode_form").submit(function(event){
+		var post_data = $("#passcode_form").serialize(); 
+		event.preventDefault();
+		$.post( controller, post_data, function( data ) {
+		  if(data.result == true){
+			$("#notification").html("Thank you. You will receive an email with a link to view the content");
+			$("#passcode_form_contaner").hide();
+		  }else{
+			$("#notification").html("The passcode you entered is not valid. Please check the passcode given by our support staff.");
+		  }
+		},"json");
+	});
+	
+	$(".related-title h2").on("click",function(){
+		console.log(this);
+	});
+	
+function getUrlVars() {
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+        vars[key] = value;
+    });
+    return vars;
+}
+</script>
+</body>
+</html>

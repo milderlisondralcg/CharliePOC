@@ -1,0 +1,349 @@
+﻿@model DMP.Models.ViewModel.EditDocumentView
+
+
+@*@using (Html.BeginForm())*@
+@
+ViewBag.Title = "Edit";
+Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+#line default
+#line hidden
+
+#line 3 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>EditDocumentView</h4>
+        <hr />
+        @"~/Views/Shared/_Layout.cshtml";
+
+
+#line default
+#line hidden
+
+#line 3 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+        using (Html.BeginForm()
+        @Html.HiddenFor(model => model.Id)
+
+        <div class="form-group">
+            @Html.AntiForgeryToken()
+            <div class="col-md-10">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Id)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*Html.EditorFor(model => model.Category, new { htmlAttributes = new { @class = "form-control" } })*@
+                <select name="Category" id="Category" class="input-validation-error form-control text-box single-line">
+                    @if (Model.Category == "")
+                        <option value="" selected>Select Category</option>
+                    }
+                    else
+                    {
+                        <option value="">Select Category</option>
+                    }
+
+                    @if (Model.Category == "assets")
+                    {
+                        <option value="assets" selected>Assets</option>
+                    }
+                    else
+                    {
+                        <option value="assets">Assets</option>
+                    }
+
+                    @if (Model.Category == "emailblasts")
+                    {
+                        <option value="emailblasts" selected>Email Blasts</option>
+                    }
+                    else
+                    {
+                        <option value="emailblasts">Email Blasts</option>
+                    }
+
+                    @if (Model.Category == "file")
+                    {
+                        <option value="file" selected>Files</option>
+                    }
+                    else
+                    {
+                        <option value="file">Files</option>
+                    }
+
+                </select>
+                @Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            <div class="col-md-10">
+                @Html.LabelFor(model => model.Category, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Category, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" })
+            <div class="col-md-10">
+                @Html.LabelFor(model => model.Tags, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.Tags, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.ValidationMessageFor(model => model.Tags, "", new { @class = "text-danger" })
+            <div class="col-md-10">
+                @Html.LabelFor(model => model.SalesForceId, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.EditorFor(model => model.SalesForceId, new { htmlAttributes = new { @class = "form-control" } })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.ValidationMessageFor(model => model.SalesForceId, "", new { @class = "text-danger" })
+            <div class="col-md-10">
+                @if(Mo = Html                    @:No: <input type="radio" name="LeadRequired" value="No" />
+
+                }
+                else
+                {
+                    @:Yes: <input type="radio" name="LeadRequired"  value="Yes" />
+                    @:No: <input type="radio" name="LeadRequired" value="No" checked="checked"/>
+                }
+
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-md-2">Current File</label>
+            <div class="col-md-10">
+                <a href="@Html.L" target="_blank">View Current File</a>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="file" class="control-label col-md-2">File</label>
+            <div class="col-md-10">
+                <input type="file" name="file" id="file" />
+                @Html.ValidationMessageFor(x => x.Web.Routing;
+using DMP;
+
+public class _Page_Views_Document_Edit_cshtml : System.Web.Mvc.WebViewPage<DMP.Models.ViewModel.UpdateDocumentView> {
+                    private static object @__o;
+#line hidden
+                    public _Page_Views_Document_Edit_cshtml() {
+                    }
+                    protected System.Web.HttpApplication ApplicationInstance {
+                        get {
+                            return ((System.Web.HttpApplication)(Context.ApplicationInstance));
+                        }
+                    }
+                    private void @__RazorDesignTimeHelpers__() {
+#pragma warning disable 219
+
+#line 1 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                        DMP.Models.ViewModel.UpdateDocumentView; __inheritsHelper = null;
+
+
+#line default
+#line hidden
+
+#line 2 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                        DMP.Models.ViewModel.UpdateDocumentView __inheritsHelper = null;
+
+
+#line default
+#line hidden
+#pragma warning restore 219
+                    }
+                    public override void Execute() {
+
+#line 3 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+
+                        ViewBag.Title = "Edit";
+                        Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+#line default
+#line hidden
+
+#line 4 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                        using (Html.BeginForm())
+                        {
+
+
+#line default
+#line hidden
+
+#line 5 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.AntiForgeryToken();
+
+
+#line default
+#line hidden
+
+#line 6 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+
+
+
+
+#line default
+#line hidden
+
+#line 7 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.ValidationSummary(true, "", new { @class = "text-danger" });
+
+
+#line default
+#line hidden
+
+#line 8 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.HiddenFor(model => model.Id);
+
+
+#line default
+#line hidden
+
+#line 9 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.LabelFor(model => model.Title, htmlAttributes: new { @class = "control-label col-md-2" });
+
+
+#line default
+#line hidden
+
+#line 10 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } });
+
+
+#line default
+#line hidden
+
+#line 11 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" });
+
+
+#line default
+#line hidden
+
+#line 12 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            n     __o = Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label col-md-2" });
+
+
+#line default
+#line hidden
+
+#line 13 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.EditorFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } });
+
+
+#line default
+#line hidden
+
+#line 14 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" });
+
+
+#line default
+#line hidden
+
+#line 15 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.LabelFor(model => model.Category, htmlAttributes: new { @class = "control-label col-md-2" });
+
+
+#line default
+#line hidden
+
+#line 16 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.EditorFor(model => model.Category, new { htmlAttributes = new { @class = "form-control" } });
+
+
+#line default
+#line hidden
+
+#line 17 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger" });
+
+
+#line default
+#line hidden
+
+#line 18 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.LabelFor(model => model.Tags, htmlAttributes: new { @class = "control-label col-md-2" });
+
+
+#line default
+#line hidden
+
+#line 19 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.EditorFor(model => model.Tags, new { htmlAttributes = new { @class = "form-control" } });
+
+
+#line default
+#line hidden
+
+#line 20 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.ValidationMessageFor(model => model.Tags, "", new { @class = "text-danger" });
+
+
+#line default
+#line hidden
+
+#line 21 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.LabelFor(model => model.SalesForceId, htmlAttributes: new { @class = "control-label col-md-2" });
+
+
+#line default
+#line hidden
+
+#line 22 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.EditorFor(model => model.SalesForceId, new { htmlAttributes = new { @class = "form-control" } });
+
+
+#line default
+#line hidden
+
+#line 23 "C:\Users\Milder-Local\documents\visual studio 2015\Projects\DMP\DMP\Views\Document\Edit.cshtml"
+                            __o = Html.ValidationMessageFor(model => model.SalesForceId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="button" id="cancel_btn" value="Cancel" class="btn btn-default" />&nbsp;
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+                }
+
+<div>
+    @Html.EditorFor(model => model.AlternateTrackingId, new { htmlAttributes = new { @class = "form-control" } })
+</div>
+
+<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        $("#cancel_btn").click(function () {
+            window.location.href = "/Document";
+        });
+    });
+
+</script>

@@ -1,0 +1,1 @@
+var simplemaps_worldmap_mapdata=;

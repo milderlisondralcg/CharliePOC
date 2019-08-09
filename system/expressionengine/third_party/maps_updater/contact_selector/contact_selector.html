@@ -1,0 +1,278 @@
+    <!---Here you can change the type of contact lists you will receive from the contact selector. -->
+<script>
+   //Options are: "Trainings, Sales, Services"
+    var contact_selection_type = "{embed:selection_type}";
+    //If you know which contacts you wish to display you can define the three search parameters here.
+    var contact_selection_location = "{embed:selection_location}";
+    var contact_selection_category = "{embed:selection_category}";
+    var contact_selection_product = "{embed:selection_product}";
+    //If you wish to show regions as well as locations mark this variable true.
+    var contact_regions = {embed:allow_region};
+    //Path to the PHP handle.
+    var handle_path = "../assets_api_inc/contact_us/handle_contact_selector.php";
+    //Color to change the inactive states to on new search.
+    var inactiveStateColor = "#c1c1c1";
+</script>
+    <!--- Selectize CSS -->
+    <link rel="stylesheet" type="text/css" href="/assets/css/contact_us/selectize.css" />
+    <!--- Regions JS -->
+    <script type="text/javascript" src="/assets/js/contact_us/regions.js"></script>
+    <!--- Selectize JS -->
+    <script type="text/javascript" src="/assets/js/contact_us/selectize.js"></script>
+    <!---Here you can customize the look of the venders that are returned by the selection.-->
+<style>
+    #contacts_from_selection{
+        width: 100%;
+    }
+    .contact_vendor{
+        display: inline-block;
+        margin: 1%;
+        border: inset 0px;
+        width: 48%;
+        min-height: 200px;
+        max-width: 50%;
+        height: auto;
+        border-bottom: 1px solid;
+        vertical-align: top;
+    }
+    .vendor_title{
+        font-size: 17px;
+        color: #0076bf;
+        line-height: 22px;
+    }
+    .vendor_address{
+        padding: 2px;
+        display: block;    
+    }
+    .vendor_phone{
+        padding: 2px;
+        display: block;
+    }
+    .vendor_email{
+        padding: 2px;
+        display: block;
+    }
+    .vendor_website{
+        padding: 2px;
+        display: block;
+    }
+    .vendor_supported{
+        padding: 2px;
+        display: block;
+    }
+    .vendor_additional{
+        padding: 2px;
+        display: block;
+    }
+    @media only screen and (max-width: 1000px) {
+        .contact_vendor { 
+            display: block;
+            max-width: 100%;
+            width: 100%;
+        }
+    }
+</style>
+    <!---If possible do not modify anything below this point!-->
+<form id="contact_form_selector">
+    <select id="contact_regions" style="display: none" onchange="contactFormSelected(this)">
+            <option value="Select a Region">Select a Region</option>
+            <option value="North America">North America</option>
+            <option value="South America">South America</option>
+            <option value="Europe">Europe</option>
+            <option value="North America">Africa and the Middle East</option>
+            <option value="South Asia">South Asia</option>
+            <option value="North Asia">North Asia</option>
+    </select>
+    <select id="contact_locations" style="display: none" onchange="contactFormSelected(this)"></select>
+    <select id="contact_categories" style="display: none" onchange="contactFormSelected(this)"></select>
+    <select id="contact_products" style="display: none" onchange="contactFormSelected(this)"></select>
+</form>
+<div id="contacts_from_selection">
+</div>
+<script>
+    var contactLocations = [];
+    var contactCategories = [];
+    var contactProducts = [];
+    window.onload = startContactForm;
+    function startContactForm(){
+        var regionsElement = document.getElementById("contact_regions");
+        var locationElement = document.getElementById("contact_locations");
+        var categoryElement = document.getElementById("contact_categories");
+        var productElement = document.getElementById("contact_products");
+        if(contact_regions !== false){
+            $("#contact_regions").selectize();
+        }else if(contact_selection_location !== "" && contact_selection_category === "" && contact_selection_product === ""){
+            locationElement.innerHTML = "<option value='"+contact_selection_location+"' selected>"+contact_selection_location+"</option>";
+            contactFormSelected(locationElement);
+        }else if(contact_selection_location !== "" && contact_selection_category !== "" && contact_selection_product === ""){
+            locationElement.innerHTML = "<option value='"+contact_selection_location+"' selected>"+contact_selection_location+"</option>";
+            categoryElement.innerHTML = "<option value='"+contact_selection_category+"' selected>"+contact_selection_category+"</option>";
+            contactFormSelected(categoryElement);
+        }else if(contact_selection_location !== "" && contact_selection_category !== "" && contact_selection_product !== ""){
+            locationElement.innerHTML = "<option value='"+contact_selection_location+"' selected>"+contact_selection_location+"</option>";
+            categoryElement.innerHTML = "<option value='"+contact_selection_category+"' selected>"+contact_selection_category+"</option>";
+            productElement.innerHTML = "<option value='"+contact_selection_product+"' selected>"+contact_selection_product+"</option>";
+            contactFormSelected(productElement);
+        }else{
+            for(var i = 0; i < contactRegions.length; i++){
+                contactLocations = contactLocations.concat(contactRegions[i]["states"]);
+            }
+            contactLocations.sort();
+            locationElement.innerHTML = buildContactSelect(0);
+            $("#contact_locations").selectize();
+        }
+    }
+    function buildContactSelect(type){
+        var options = "";
+        if(type == 0){
+            options += "<option value='Select a Location'>Select a Location</option>";
+            var max = contactLocations.length;
+            for(var i = 0; i < max; i++){
+                options += '<option value="' + contactLocations[i] + '">' + contactLocations[i] + '</option>';
+            }
+        }else if(type == 1){
+            options += "<option value='Select a Category'>Select a Category</option>";
+            var max = contactCategories.length;
+            for(var i = 0; i < max; i++){
+                options += '<option value="' + contactCategories[i] + '">' + contactCategories[i] + '</option>';
+            }
+        }else if(type == 2){
+            options += "<option value='Select a Product'>Select a Product</option>";
+            var max = contactProducts.length;
+            for(var i = 0; i < max; i++){
+                options += '<option value="' + contactProducts[i] + '">' + contactProducts[i] + '</option>';
+            }
+        }
+        return options;
+    }
+    function contactFormSelected(item){
+        var selected = item.options[item.selectedIndex].value;
+        var loc = document.getElementById("contact_locations");
+        var cat = document.getElementById("contact_categories");
+        var pro = document.getElementById("contact_products");
+        var type;
+        var sendData = "";
+        if(item.id == "contact_regions"){
+            deleteSelect(loc);
+            deleteSelect(cat);
+            deleteSelect(pro);
+            document.getElementById("contacts_from_selection").innerHTML = "";
+            if(selected != "Select a Region"){
+                for(var i = 0; i < contactRegions.length; i++){
+                    if(contactRegions[i]["name"] == selected){
+                        contactLocations = contactRegions[i]["states"].sort();
+                    }
+                }
+                loc.innerHTML = buildContactSelect(0);
+                $(loc).selectize();
+            }
+            type = 0;
+        }else if(item.id == "contact_locations"){
+            sendData = 'Flag='+contact_selection_type+'&Location=' + selected;
+            var selectTags = document.getElementById('contact_form_selector').getElementsByTagName("select");
+            for(var i = 1; i < selectTags.length; i++) {
+              selectTags[i].selectedIndex =0;
+            }
+            type = 1;
+        }else if(item.id == "contact_categories"){
+            sendData = "Flag="+contact_selection_type+"&Location=" + loc.options[loc.selectedIndex].value +"&Categories=" + selected;
+            type = 2;
+        }else if(item.id == "contact_products"){
+            var categorySelected = "";
+            if(typeof cat.options[cat.selectedIndex] !== "undefined"){
+                categorySelected = cat.options[cat.selectedIndex].value;
+            }
+            sendData = "Flag="+contact_selection_type+"&Location=" + loc.options[loc.selectedIndex].value +"&Categories=" + categorySelected + "&Products=" + selected;
+            type = 3;
+        }
+        if(type > 0 && selected != ""){
+            var stateId;
+            var xhttp;
+            xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    var obj = JSON.parse(this.responseText);
+                    if(type == 1){
+                        if(typeof simplemaps_worldmap_mapdata !== "undefinded" || obj.vendors !== ""){
+                            stateId = obj.abbr;
+                            resetColor();
+                            if(obj.vendors !== ""){
+                                simplemaps_worldmap_mapdata.state_specific[stateId].color = "#0076BF";
+                                simplemaps_worldmap.state_zoom(stateId);
+                            }
+                            simplemaps_worldmap.refresh();
+                        }
+                        if (obj.categories !== "") {
+                            deleteSelect(cat);
+                            deleteSelect(pro);
+                            contactCategories = obj.categories;
+                            cat.innerHTML = buildContactSelect(1);
+                            $(cat).selectize();
+                        }else if(obj.products !== ""){
+                            deleteSelect(cat);
+                            deleteSelect(pro);
+                            contactProducts = obj.products;
+                            pro.innerHTML = buildContactSelect(2);
+                            $(pro).selectize();
+                        }else if(typeof simplemaps_worldmap_mapdata !== "undefinded" && obj.vendors === ""){
+                            resetColor();
+                            simplemaps_worldmap.refresh();
+                            simplemaps_worldmap.back();
+                            deleteSelect(cat);
+                            deleteSelect(pro);
+                        }else if(obj.vendors === ""){
+                            deleteSelect(cat);
+                            deleteSelect(pro);
+                        }
+                    }
+                    if(type == 2){
+                        if(obj.products !== "" && cat.options[cat.selectedIndex].value !== "Select a Category"){
+                            deleteSelect(pro);
+                            contactProducts = obj.products;
+                            pro.innerHTML = buildContactSelect(2);
+                            $(pro).selectize();
+                        }else{
+                            deleteSelect(pro);
+                        }
+                    }
+                    if(loc.options[loc.selectedIndex].value == "Select a Location"){
+                        document.getElementById("contacts_from_selection").innerHTML = "";
+                    }else if(obj.vendors !== ""){
+                        document.getElementById("contacts_from_selection").innerHTML = obj.vendors;
+                    }else{
+                        document.getElementById("contacts_from_selection").innerHTML = "See below for more contacts.";
+                    }
+                }
+            };
+            xhttp.open("POST", handle_path, true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send(encodeURI(sendData));
+        }
+    }
+    function deleteSelect(sel){
+        if($(sel)[0].selectize){
+            $(sel)[0].selectize.destroy();
+            sel.innerHTML = "";
+            sel.style.display = "none";
+        }
+    }
+    function resetColor() {
+        for(var state in simplemaps_worldmap_mapdata.state_specific){
+            StateInactivity = simplemaps_worldmap_mapdata.state_specific[state].inactive;
+
+            if(StateInactivity != "yes"){
+                stateLoc = simplemaps_worldmap_mapdata.state_specific[state];
+
+                if (stateLoc.color !== undefined){
+                    simplemaps_worldmap_mapdata.state_specific[state].color = inactiveStateColor;
+                }
+            }else{
+                stateLoc = simplemaps_worldmap_mapdata.state_specific[state];
+
+                if (stateLoc.color !== undefined){
+                    simplemaps_worldmap_mapdata.state_specific[state].color = simplemaps_worldmap_mapdata.main_settings.state_color;
+                }
+            }
+        }
+    }
+</script>

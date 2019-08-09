@@ -1,0 +1,143 @@
+﻿
+@{
+    ViewBag.Title = "Documents";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-wrapper">
+    <div class="contents">
+        <div class="heading">
+            <h2>Document List</h2>
+        </div>
+
+        <div class="page-contents">
+            <div>
+
+                @foreach (var doc in ViewBag.DocsList)
+                {
+                    if (doc.Tags == "" || doc.Tags == null)
+                    {
+                        doc.Tags = "N/A";
+                    }
+                    else
+                    {
+                        doc.Tags.Trim();
+                    }
+                    if (doc.SalesForceId == "" || doc.SalesForceId == null)
+                    {
+                        doc.SalesForceId = "N/A";
+                    }
+                    else
+                    {
+                        doc.SalesForceId.Trim();
+                    }
+                    if (doc.AlternateTrackingId == "" || doc.AlternateTrackingId == null)
+                    {
+                        doc.AlternateTrackingId = "N/A";
+                    }
+
+                    if (doc.Category == "file")
+                    {
+                        doc.Category = "File";
+                    }
+                    if (doc.Category == "emailblasts")
+                    {
+                        doc.Category = "Email Blasts";
+                    }
+                    if (doc.Category == "assets")
+                    {
+                        doc.Category = "Assets";
+                    }
+
+                    <div class="group">
+                        <div class="form-row">
+                            <div class="form-col-label"><label>Title</label></div>
+                            <div class="form-col-input"><label>@doc.Title</label></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col-label"><label>Description</label></div>
+                            <div class="form-col-input"><label>@doc.Description</label></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col-label"><label>Category</label></div>
+                            <div class="form-col-input"><label>@doc.Category</label></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col-label"><label>Tags</label></div>
+                            <div class="form-col-input"><label>@doc.Tags</label></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col-label"><label>SalesForce ID</label></div>
+                            <div class="form-col-input"><label>@doc.SalesForceId</label></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col-label"><label>Alternate Tracking ID</label></div>
+                            <div class="form-col-input"><label>@doc.AlternateTrackingId</label></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col-label"><label>Lead Form Required</label></div>
+                            <div class="form-col-input"><label>@doc.LeadRequired</label></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col-label"><label>Lead Notification Recipient</label></div>
+                            <div class="form-col-input"><label>@doc.EmailNotify</label></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col-label"><label>App Code</label></div>
+                            <div class="form-col-input"><label>@doc.AppCode</label></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col-label"><label>Product Group</label></div>
+                            <div class="form-col-input"><label>@doc.ProductGroup</label></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col-label"><label>Link to File</label></div>
+                            <div class="form-col-input"><label>@doc.EndpointURL</label></div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-col-label"><label>Action</label></div>
+                            <div class="form-col-input">
+                                <label>
+                                    <a href="/Document/Edit/@doc.Id" title="Edit"><img src="/Content/themes/base/images/icon-edit.png" alt="Edit"></a>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a href="###" class="delete_doc" rel="@doc.Id" title="Delete"><img src="/Content/themes/base/images/icon-delete.png" alt="Delete"></a>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <a href="/Document/UploadNew/@doc.Id" title="Upload New Revision"><img src="/Content/themes/base/images/icon-upload-file.png" alt="Upload New Revision"></a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    $(document).ready(function () {
+        $(".delete_doc").click(function () {
+            if (confirm("Are you sure you want to delete this document?")) {
+                $.post("/Document/DeleteDocument/", { id: $(this).attr("rel") },
+                    function (data) {
+                        if (data.success == true) {
+                            window.location.href = "/Document";
+                        }
+                    });
+            }
+        });
+    });
+
+</script>
+
