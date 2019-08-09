@@ -1,0 +1,106 @@
+﻿
+|[![](http://uprog.com/wp-content/uploads/2017/11/Logo-v0.4.png)](http://uprog.com/)| Universal Programming LLC |
+|--------|--------|
+
+# Contact Selector
+This package was originally developed for use with an Expression Engine 2.0 system, however it is fully contained and only requires a few simple changes to be made in order to have proper functionality in any server environment.
+
+# Files
+
+Verify that the structure matches the below before using this tool.
+## Structure
+
+	
+    maps_updater
+    	|   mcp.maps_updater.php
+    	|   mod.maps_updater.php
+    	|   README
+    	|   upd.maps_updater.php
+    	|   
+    	+---contact_selector
+    	|       contact_selector.html
+    	|       handle_contact_selector.php
+    	|       regions.js
+    	|       selectize.css
+    	|       selectize.js
+    	|       
+    	+---css
+    	|   |   bootstrap.css
+    	|   |   selectize.css
+    	|   |   style.css
+    	|   |   trumbowyg.css
+    	|   |   
+    	|   \---ui
+    	|           FhHRx.gif
+    	|           icons.svg
+    	|           
+    	+---javascript
+    	|       bootstrap.js
+    	|       jquery.js
+    	|       scripts.js
+    	|       selectize.js
+    	|       trumbowyg.js
+    	|       
+    	+---language
+    	|   \---english
+    	|           maps_updater_lang.php
+    	|           
+    	\---views
+    	        attributes.php
+    	        config.php
+    	        index.php
+    	        location_inc.php
+    	        mapdata-read.php
+    	        points_inc.php
+    	        providers_inc.php
+    	        publish.php
+    	        regions.js
+    	        settings_inc.php
+    	        updateLocation.php
+    	        updatePoints.php
+    	        updateProviders.php
+    	        updateSettings.php
+    	        _wrapper.php
+        
+
+## Required for Expression Engine:
+
+ 1. mcp.maps_updater.php
+ 2. mod.maps_updater.php
+ 3. upd.maps_updater.php
+
+# Usage
+Anything you need to know about using this tool can be found in this section.
+## Config
+Every variable needed by initialization is present in the `/views/config.php` file. This includes access to the database, paths to place files as well as variables used within the tool itself.
+## Customization
+You can customize the front-end visuals by opening the template `/contact_selector/contact_selector.html` and changing the CSS in the `<style>` tags. If you change this file in the module folder, `maps_updater/`, it will publish the changes to the set path in `/views/config.php`.
+
+## Initialization
+Lets get things started!
+### Admin Tool((Back-end):
+When using **Expression Engine** all you need to do is copy the folder `maps_updater/` into Expression Engines' `/third_party/` modules folder, install the module and open it. This will move all the files to the correct locations assuming the paths are correctly set in `/views/config.php`.
+**For everything else**, place the `maps_updater/` folder within your CMS secured folders to prevent access from unauthorized individuals, and open the file `/views/index.php` and uncomment the two comment blocks marked as
+
+> // Uncomment the following for use outside Expression Engine
+
+ then run `/views/index.php` to start using the tool. Like before assuming the paths are correctly set in `/views/config.php` it will move the files to the correct locations and work as intended.
+
+### Contact Selector(Front-end):
+
+When using **Expression Engine** embed the template where you would like it to display with the following code:`{embed="includes/contact_selector"}`.
+This embed code is setup to allow 5 different parameters which allow you to customize the output of the contacts, **these parameters are case sensitive**.
+ - `... allow_region="true" ...}`
+ - `... selection_type="All" ...}`
+
+All three of the following must be present to work correctly.
+- `... selection_location="United States" ...}`
+- `... selection_category="Category 1" ...}`
+- `... selection_product="Product 1" ...}`
+
+Example of all 5
+
+ - `{embed="includes/contact_selector" selection_type="All" allow_region="false" selection_location="United States" selection_category="Category 1" selection_product="Product 1"}`
+
+**For everything else**, the conditions above are all defined at the top of the `/contact_selector/contact_selector.html` file and need to be set for the tool to work correctly.
+

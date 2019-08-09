@@ -1,0 +1,119 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>readme</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html">
+<table>
+<thead>
+<tr>
+<th><a href="http://uprog.com/"><img src="http://uprog.com/wp-content/uploads/2017/11/Logo-v0.4.png" alt=""></a></th>
+<th>Universal Programming LLC</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table><h1 id="contact-selector">Contact Selector</h1>
+<p>This package was originally developed for use with an Expression Engine 2.0 system, however it is fully contained and only requires a few simple changes to be made in order to have proper functionality in any server environment.</p>
+<h1 id="files">Files</h1>
+<p>Verify that the structure matches the below before using this tool.</p>
+<h2 id="structure">Structure</h2>
+<pre><code>maps_updater
+	|   mcp.maps_updater.php
+	|   mod.maps_updater.php
+	|   README
+	|   upd.maps_updater.php
+	|   
+	+---contact_selector
+	|       contact_selector.html
+	|       handle_contact_selector.php
+	|       regions.js
+	|       selectize.css
+	|       selectize.js
+	|       
+	+---css
+	|   |   bootstrap.css
+	|   |   selectize.css
+	|   |   style.css
+	|   |   trumbowyg.css
+	|   |   
+	|   \---ui
+	|           FhHRx.gif
+	|           icons.svg
+	|           
+	+---javascript
+	|       bootstrap.js
+	|       jquery.js
+	|       scripts.js
+	|       selectize.js
+	|       trumbowyg.js
+	|       
+	+---language
+	|   \---english
+	|           maps_updater_lang.php
+	|           
+	\---views
+	        attributes.php
+	        config.php
+	        index.php
+	        location_inc.php
+	        mapdata-read.php
+	        points_inc.php
+	        providers_inc.php
+	        publish.php
+	        regions.js
+	        settings_inc.php
+	        updateLocation.php
+	        updatePoints.php
+	        updateProviders.php
+	        updateSettings.php
+	        _wrapper.php
+</code></pre>
+<h2 id="required-for-expression-engine">Required for Expression Engine:</h2>
+<ol>
+<li>mcp.maps_updater.php</li>
+<li>mod.maps_updater.php</li>
+<li>upd.maps_updater.php</li>
+</ol>
+<h1 id="usage">Usage</h1>
+<p>Anything you need to know about using this tool can be found in this section.</p>
+<h2 id="config">Config</h2>
+<p>Every variable needed by initialization is present in the <code>/views/config.php</code> file. This includes access to the database, paths to place files as well as variables used within the tool itself.</p>
+<h2 id="customization">Customization</h2>
+<p>You can customize the front-end visuals by opening the template <code>/contact_selector/contact_selector.html</code> and changing the CSS in the <code>&lt;style&gt;</code> tags. If you change this file in the module folder, <code>maps_updater/</code>, it will publish the changes to the set path in <code>/views/config.php</code>.</p>
+<h2 id="initialization">Initialization</h2>
+<p>Lets get things started!</p>
+<h3 id="admin-toolback-end">Admin Tool((Back-end):</h3>
+<p>When using <strong>Expression Engine</strong> all you need to do is copy the folder <code>maps_updater/</code> into Expression Engines’ <code>/third_party/</code> modules folder, install the module and open it. This will move all the files to the correct locations assuming the paths are correctly set in <code>/views/config.php</code>.<br>
+<strong>For everything else</strong>, place the <code>maps_updater/</code> folder within your CMS secured folders to prevent access from unauthorized individuals, and open the file <code>/views/index.php</code> and uncomment the two comment blocks marked as</p>
+<blockquote>
+<p>// Uncomment the following for use outside Expression Engine</p>
+</blockquote>
+<p>then run <code>/views/index.php</code> to start using the tool. Like before assuming the paths are correctly set in <code>/views/config.php</code> it will move the files to the correct locations and work as intended.</p>
+<h3 id="contact-selectorfront-end">Contact Selector(Front-end):</h3>
+<p>When using <strong>Expression Engine</strong> embed the template where you would like it to display with the following code:<code>{embed="includes/contact_selector"}</code>.<br>
+This embed code is setup to allow 5 different parameters which allow you to customize the output of the contacts, <strong>these parameters are case sensitive</strong>.</p>
+<ul>
+<li><code>... allow_region="true" ...}</code></li>
+<li><code>... selection_type="All" ...}</code></li>
+</ul>
+<p>All three of the following must be present to work correctly.</p>
+<ul>
+<li><code>... selection_location="United States" ...}</code></li>
+<li><code>... selection_category="Category 1" ...}</code></li>
+<li><code>... selection_product="Product 1" ...}</code></li>
+</ul>
+<p>Example of all 5</p>
+<ul>
+<li><code>{embed="includes/contact_selector" selection_type="All" allow_region="false" selection_location="United States" selection_category="Category 1" selection_product="Product 1"}</code></li>
+</ul>
+<p><strong>For everything else</strong>, the conditions above are all defined at the top of the <code>/contact_selector/contact_selector.html</code> file and need to be set for the tool to work correctly.</p>
+</div>
+</body>
+
+</html>

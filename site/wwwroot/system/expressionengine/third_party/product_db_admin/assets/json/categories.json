@@ -1,0 +1,49 @@
+{
+    "Lasers" : {
+        "options" : [
+            "Product Name",
+            "Technology",
+            "Wavelength",
+            "Power",
+            "Mode",
+            "Pulse Width",
+            "Url"
+        ]
+    },
+    "Components" : {
+        "options" : [
+            "Product Name",
+            "Application",
+            "Technology",
+            "Wavelength",
+            "Power",
+            "Mode",
+            "Pulse Width",
+            "Url"
+        ]
+    },
+    "Tools and Systems" : {
+        "options" : [
+            "Product Name",
+            "Application",
+            "Material Type",
+            "Material Thickness",
+            "Motion Type",
+            "Max. Work Area",
+            "Precision",
+            "Url"
+        ]
+    },
+    "Laser Measurement" : {
+        "options" : [
+            "Product Name",
+            "Wavelength",
+            "Aperture Size",
+            "Min. Energy",
+            "Max. Energy",
+            "Repetition Rate",
+            "Laser Pulse Width",
+            "Url"
+        ]
+    }
+}

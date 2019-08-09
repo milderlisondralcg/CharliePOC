@@ -1,0 +1,62 @@
+{
+    "Components" : [
+        "Harmonic Generator",
+        "HGS-D",
+        "HGS-F",
+        "HGS-T",
+        "Pulse Picker",
+        "OPA 9800/9850",
+        "OPA 9400",
+        "OPA 9450",
+        "OPA 9800",
+        "OPA 9850"
+    ],
+    "Lasers" : [
+        "Azure",
+        "ColdRay Lasers",
+        "ColdRay-375",
+        "ColdRay-405",
+        "ColdRay-445",
+        "ColdRay-473",
+        "ColdRay-640",
+        "ColdRay-660",
+        "Compass 115M",
+        "CUBE",
+        "DIAMOND C-Series",
+        "DIAMOND GEM-Series",
+        "Genesis Lasers",
+        "Genesis CX-Series",
+        "Genesis CX SLM-Series" 
+    ],
+    "Laser Measurement" : [
+        "EnergyMax Laser Sensors",
+        "J-50MUV-248",
+        "J-50MUV-193",
+        "J-25MUV-193",
+        "J-25MUV-248",
+        "J-50MT-10KHZ",
+        "J-25MT-10KHZ",
+        "J-10MT-10KHZ",
+        "J-50MB-HE",
+        "J-50MB-LE",
+        "J-25MB-LE",
+        "J-25MB-HE",
+        "J-10MB-HE",
+        "J-10MB-LE",
+        "J-25MB-IR",
+        "J-50MB-YAG",
+        "J-50MB-IR"
+    ],
+    "Tools and Systems" : [
+        "UW1200",
+        "UW180",
+        "UW150RT",
+        "Select",
+        "Select",
+        "Select with SweetSpot",
+        "Select Fiber",
+        "EasyMark",
+        "EasyMark 10E",
+        "EasyMark F20" 
+    ]
+}

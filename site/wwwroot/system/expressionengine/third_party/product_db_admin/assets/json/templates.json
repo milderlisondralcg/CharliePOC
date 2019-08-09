@@ -1,0 +1,254 @@
+{
+    "CO2" : {
+        "options" : [
+            "CO2",
+            "CW",
+            "Diode",
+            "DPSS",
+            "Excimer",
+            "Genesis",
+            "High Power Industrial PS Laser",
+            "Ion",
+            "Obis",
+            "OPSL",
+            "Pulsed",
+            "QCW",
+            "Q Switched DPSS",
+            "Ultrafast"
+        ]
+    },
+    "CW" : {
+        "options" : [
+            "CO2",
+            "CW",
+            "Diode",
+            "DPSS",
+            "Excimer",
+            "Genesis",
+            "High Power Industrial PS Laser",
+            "Ion",
+            "Obis",
+            "OPSL",
+            "Pulsed",
+            "QCW",
+            "Q Switched DPSS",
+            "Ultrafast"
+        ]
+    },
+    "Diode" : {
+        "options" : [
+            "CO2",
+            "CW",
+            "Diode",
+            "DPSS",
+            "Excimer",
+            "Genesis",
+            "High Power Industrial PS Laser",
+            "Ion",
+            "Obis",
+            "OPSL",
+            "Pulsed",
+            "QCW",
+            "Q Switched DPSS",
+            "Ultrafast"  
+        ]
+    },
+    "DPSS" : {
+        "options" : [
+            "CO2",
+            "CW",
+            "Diode",
+            "DPSS",
+            "Excimer",
+            "Genesis",
+            "High Power Industrial PS Laser",
+            "Ion",
+            "Obis",
+            "OPSL",
+            "Pulsed",
+            "QCW",
+            "Q Switched DPSS",
+            "Ultrafast" 
+        ]
+    },
+    "Excimer" : {
+        "options" : [
+            "CO2",
+            "CW",
+            "Diode",
+            "DPSS",
+            "Excimer",
+            "Genesis",
+            "High Power Industrial PS Laser",
+            "Ion",
+            "Obis",
+            "OPSL",
+            "Pulsed",
+            "QCW",
+            "Q Switched DPSS",
+            "Ultrafast"
+        ]
+    },
+    "Genesis" : {
+        "options" : [
+            "CO2",
+            "CW",
+            "Diode",
+            "DPSS",
+            "Excimer",
+            "Genesis",
+            "High Power Industrial PS Laser",
+            "Ion",
+            "Obis",
+            "OPSL",
+            "Pulsed",
+            "QCW",
+            "Q Switched DPSS",
+            "Ultrafast"
+        ]
+    },
+    "High Power Industrial PS Laser" : {
+        "options" : [
+            "CO2",
+            "CW",
+            "Diode",
+            "DPSS",
+            "Excimer",
+            "Genesis",
+            "High Power Industrial PS Laser",
+            "Ion",
+            "Obis",
+            "OPSL",
+            "Pulsed",
+            "QCW",
+            "Q Switched DPSS",
+            "Ultrafast"
+        ]
+    },
+    "Ion" : {
+        "options" : [
+            "CO2",
+            "CW",
+            "Diode",
+            "DPSS",
+            "Excimer",
+            "Genesis",
+            "High Power Industrial PS Laser",
+            "Ion",
+            "Obis",
+            "OPSL",
+            "Pulsed",
+            "QCW",
+            "Q Switched DPSS",
+            "Ultrafast"
+        ]
+    },
+    "Obis" : {
+        "options" : [
+            "CO2",
+            "CW",
+            "Diode",
+            "DPSS",
+            "Excimer",
+            "Genesis",
+            "High Power Industrial PS Laser",
+            "Ion",
+            "Obis",
+            "OPSL",
+            "Pulsed",
+            "QCW",
+            "Q Switched DPSS",
+            "Ultrafast" 
+        ]
+    },
+    "OPSL" : {
+        "options" : [
+            "CO2",
+            "CW",
+            "Diode",
+            "DPSS",
+            "Excimer",
+            "Genesis",
+            "High Power Industrial PS Laser",
+            "Ion",
+            "Obis",
+            "OPSL",
+            "Pulsed",
+            "QCW",
+            "Q Switched DPSS",
+            "Ultrafast" 
+        ]
+    },
+    "Pulsed" : {
+        "options" : [
+            "CO2",
+            "CW",
+            "Diode",
+            "DPSS",
+            "Excimer",
+            "Genesis",
+            "High Power Industrial PS Laser",
+            "Ion",
+            "Obis",
+            "OPSL",
+            "Pulsed",
+            "QCW",
+            "Q Switched DPSS",
+            "Ultrafast"
+        ]
+    },
+    "QCW" : {
+        "options" : [
+            "CO2",
+            "CW",
+            "Diode",
+            "DPSS",
+            "Excimer",
+            "Genesis",
+            "High Power Industrial PS Laser",
+            "Ion",
+            "Obis",
+            "OPSL",
+            "Pulsed",
+            "QCW",
+            "Q Switched DPSS",
+            "Ultrafast" 
+        ]
+    },
+    "Q Switched DPSS" : {
+        "options" : [
+            "CO2",
+            "CW",
+            "Diode",
+            "DPSS",
+            "Excimer",
+            "Genesis",
+            "High Power Industrial PS Laser",
+            "Ion",
+            "Obis",
+            "OPSL",
+            "Pulsed",
+            "QCW",
+            "Q Switched DPSS",
+            "Ultrafast" 
+        ]
+    },
+    "Ultrafast" : {
+        "options" : [
+            "CO2",
+            "CW",
+            "Diode",
+            "DPSS",
+            "Excimer",
+            "Genesis",
+            "High Power Industrial PS Laser",
+            "Ion",
+            "Obis",
+            "OPSL",
+            "Pulsed",
+            "QCW",
+            "Q Switched DPSS",
+            "Ultrafast" 
+        ]
+    }
+}

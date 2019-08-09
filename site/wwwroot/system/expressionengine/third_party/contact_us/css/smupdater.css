@@ -1,0 +1,29 @@
+.nav{
+	margin-top: 15px;
+	margin-left: auto;
+	margin-right: auto;
+}
+.tab-content{
+	margin-left: auto;
+	margin-right: auto;
+	border: solid #ddd 1px;
+	border-top: 0px transparent;
+	border-right: 0px transparent;
+}
+#tab-content table{
+    width:100%;
+}
+#tab-content tr{
+    height:50px;
+    border-bottom:solid 1px #ddd;
+}
+#tab-content th{
+    padding:15px;
+    font-size: 24px;
+}
+#tab-content td{
+    vertical-align:top;
+    text-align:center;
+    border-right:solid 1px #ddd;
+	padding: 15px;
+}
