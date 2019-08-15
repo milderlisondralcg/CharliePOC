@@ -156,7 +156,12 @@ function addLocation(){
     var td2 = '<td align="center" class="location_name"><input type="text" name="location_name[]" value="" placeholder="Name"/>';
     var td3 = '<td align="center" class="latlng"><span onclick="initAutocomplete(this)" style="display:inline-block;width:25%;height:50px;vertical-align:middle;cursor:pointer;" class="glyphicon glyphicon-map-marker"></span><input type="text" style="display:none" class="googleAddress" name="location_google[]" /><div style="display:inline-block;width:70%;"><input type="text" name="location_lat[]" value="" placeholder="Latitude"/><br/><input type="text" name="location_lng[]" value="" placeholder="Longitude"/></div>';
     var td4 = '<td align="center" class="location_content">'+buildSelect('Content', 'location', '')+'</td>';
-    var tbody = $('#mapLocations > tbody:last-child').append('<tr>'+td0+td1+td2+td3+td4+'</tr>');
+	var td5 = '<td align="center" class="border_color"><input type="color" name="border_color" onChange="update_location_color(this, 0)" value="#808080"/></td>';
+	var td6 = '<td align="center" class="location_color"><input type="color" name="location_color" onChange="update_location_color(this, 0)" value="#2A5DA2"/></td>';
+	var td7 = '<td align="center" class="border"><input type="text" name="border" value="1"/></td>';
+	var td8 = '<td align="center" class="hover_color"><input type="color" name="hover_color" onChange="update_location_color(this, 0)" value="#0076BF"/></td>';
+	var td9 = '<td><input type="radio" value="0" name="group_1043" class="group_select" checked>Representatives<br><input type="radio" value="1" name="group_1043" class="group_select">Training Offices <br><input type="radio" value="2" name="group_1043" class="group_select"> Sales/Service Offices<br><input type="radio" value="3" name="group_1043" class="group_select"> Service/Training Offices <br><input type="radio" value="4" name="group_1043" class="group_select"> Sales/Service/Training Offices <br></td>';
+    var tbody = $('#mapLocations > tbody:last-child').append('<tr>'+td0+td1+td2+td3+td4+td5+td6+td7+td8+td9+'</tr>');
 
     var tr =  $('#mapLocations tr').last();
     var $select1 = tr.find('.createSelectize').selectize({
@@ -261,7 +266,13 @@ function addProvider(){
     '<tr><th>Products</th><td>'+buildSelect("Products", "provider", "")+'</td></tr>'+
     '<tr><th>Trainings</th><td>'+buildSelect("Trainings", "provider", "")+'</td></tr>'+
     '<tr><th>Sales</th><td><input type="checkbox" onchange="checkChange(this)" name="provider_sales[]" value="0" /></td></tr>'+
+	'<tr><th>Sales Phone</th><td><input type="text" name="provider_sales_phone[]" value="" /></td></tr>'+
+	'<tr><th>Sales Email</th><td><input type="text" name="provider_sales_email[]" value="" /></td></tr>'+
     '<tr><th>Service</th><td><input type="checkbox" onchange="checkChange(this)" name="provider_service[]" value="0"/></td></tr>'+
+	'<tr><th>Service Phone</th><td><input type="text" name="provider_service_phone[]" value=""/></td></tr>'+
+	'<tr><th>Service Email</th><td><input type="text" name="provider_service_email[]" value=""/></td></tr>'+
+	'<tr><th>Training Phone</th><td><input type="text" name="provider_training_phone[]" value=""/></td></tr>'+
+	'<tr><th>Training Email</th><td><input type="text" name="provider_training_email[]" value=""/></td></tr>'+
     '<tr><th>Priority</th><td>'+buildSelect("Priority", "provider", "5")+'</td></tr>'+
     '<tr><th>Visible</th><td><input type="checkbox" onchange="checkChange(this)" name="provider_visible[]" value="0"</td></tr>'+
     '<tr><td style="border-right:0px;"></td><td align="right" style="border-left:0px;"><span class="providersWarning"></span><button type="button" class="btn btn-default btn-sm" onClick="updateProvider(this)" ><span class="glyphicon glyphicon-floppy-disk"></span> Save</button></td></tr>'+
@@ -585,6 +596,20 @@ function insertUpdatePoint(item){
 	var location_color = tr.find('td.location_color'); 
 	var border = tr.find('td.border'); // border size
 	var hover_color = tr.find('td.hover_color');
+	var location_group = tr.find('td.location_group');
+	
+
+	for (var i = 0, length = location_group.length; i < length; i++) {
+		if (location_group[i].checked) {
+			// do whatever you want with the checked radio
+			alert(location_group[i].value);
+
+			// only one radio can be logically checked, don't check the rest
+			break;
+		}
+	}
+	
+	//location_group
     var sendData = {};
     if(_new.val() == "true"){
         sendData["insert"] = true;

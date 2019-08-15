@@ -27,7 +27,7 @@ if(isset($_POST['update'])){
     if($zoom=="true"){$z_temp="yes";}else{$z_temp="no";}
     if($inactive=="true"){$i_temp="yes";}else{$i_temp="no";}
     $stmt = $mysqli->prepare("UPDATE maps_state SET abr = ?, name = ?, content = ?, inactive = ?, zoomable = ?, color = ?, border=? WHERE abr = ?");
-    $stmt->bind_param('sssssss', $abbrev, $name, $content, $i_temp, $z_temp, $color, $border, $abbrev);
+    $stmt->bind_param('ssssssss', $abbrev, $name, $content, $i_temp, $z_temp, $color, $border, $abbrev);
     $stmt->execute();
 	
 	

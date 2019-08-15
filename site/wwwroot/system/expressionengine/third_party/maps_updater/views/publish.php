@@ -85,11 +85,11 @@
         }
     }
     if(isset($_POST["publish"])){
-		//$mapspath = '/site/wwwroot/assets/js/simplemaps/'; //D:\home\site\wwwroot\
 		$mapspath = "D:\\home\\site\\wwwroot\\assets\\js\\simplemaps\\";
         $state = $mysqli->query("SELECT * FROM maps_state");
         $settings = $mysqli->query("SELECT * FROM maps_settings");
         $location = $mysqli->query("SELECT * FROM maps_location order by `group` DESC");
+		print_r($location);
         $main_settings = array();
         $state_specific = array();
         $locations = array();
@@ -127,9 +127,6 @@
 				$group['hover_color'] = $row['hover_color'];
 				$group['group'] = $row['group'];
 				
-				print $row['name'] . "\r\n";				
-				print $row['group']. "\r\n";
-
 				if($row['group'] != "0" || $row['group'] <> "0" ){
 					$group['image_url'] = $row['image_url'];
 					$group['type'] = $row['type'];

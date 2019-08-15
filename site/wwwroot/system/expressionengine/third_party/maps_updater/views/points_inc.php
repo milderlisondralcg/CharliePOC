@@ -73,7 +73,7 @@
                     };					
 
 					?>
-					<td>
+					<td class="location_group">
 						<?php $group_name = "group_".$row['id']; ?>
 						<input type="radio" value="0" name="<?php print $group_name; ?>" <?php if( $row['group'] == 0){ print 'checked'; } ?> class="group_select"> Representatives <br/>
 						<input type="radio" value="1" name="<?php print $group_name; ?>" <?php if( $row['group'] == 1){ print 'checked'; } ?> class="group_select"> Training Offices <br/>

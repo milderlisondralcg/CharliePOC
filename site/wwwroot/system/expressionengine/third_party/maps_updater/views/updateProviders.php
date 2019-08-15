@@ -70,8 +70,14 @@ if(isset($_POST['insert'])){
         $service = $_POST["service"];
         $priority = $_POST["priority"];
         $visible = $_POST["visible"];
-        $stmt = $mysqli->prepare("INSERT INTO maps_providers (title, address, phone, email, website, countries, additional, categories, products, trainings, sales, service, priority, visible) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
-        $stmt->bind_param('ssssssssssiiii', $title, $address, $phone, $email, $website, $countries, $additional, $categories, $products, $trainings, $sales, $service, $priority, $visible);
+		$sales_phone = $_POST["sales_phone"];
+		$sales_email = $_POST["sales_email"];
+		$service_phone = $_POST["service_phone"];
+		$service_email = $_POST["service_email"];
+		$training_phone = $_POST["training_phone"];
+		$training_email = $_POST["training_email"];			
+        $stmt = $mysqli->prepare("INSERT INTO maps_providers (title, address, phone, email, website, countries, additional, categories, products, trainings, sales, service, priority, visible, sales_phone,sales_email,service_phone,service_email,training_phone,training_email) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+        $stmt->bind_param('ssssssssssiiiissssss', $title, $address, $phone, $email, $website, $countries, $additional, $categories, $products, $trainings, $sales, $service, $priority, $visible, $sales_phone, $sales_email, $service_phone, $service_email, $training_phone, $training_email);
         $stmt->execute();
         printf($mysqli->insert_id);
     }

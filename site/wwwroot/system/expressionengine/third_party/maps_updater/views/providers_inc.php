@@ -9,7 +9,7 @@
  */
 ?>
 <?php
-    $providers = $mysqli->query("SELECT * FROM maps_providers");
+    $providers = $mysqli->query("SELECT * FROM maps_providers")
 ?>
 <form>
     <div id="providersWarning"  class="alert alert-danger" style="display:none; width:100%;">After changing the attributes you must refresh the page to modify any providers.</div>

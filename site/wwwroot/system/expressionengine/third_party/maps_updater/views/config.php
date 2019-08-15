@@ -1,4 +1,4 @@
-<?php error_reporting(E_ALL);
+<?php error_reporting(0);
 /*
  * @Author: Universal Programming 
  * @Date: 2018-03-12
@@ -15,10 +15,10 @@
             $mapsupdaterpath: Path to the maps_updater folder
             $hiddenpath: Path hidden from the client
     */
-    $toolspath = "https://charlie.coherent.com/api/?action=get-admin-products-category&category=tools_systems";
-    $lmcpath = "https://charlie.coherent.com/api/?action=get-admin-products-category&category=lmc";
-    $componentspath = "https://charlie.coherent.com/api/?action=get-admin-products-category&category=components";
-    $laserspath = "https://charlie.coherent.com/api/?action=get-admin-products-category&category=lasers";
+    $toolspath = "https://cohrstage.coherent.com/api/?action=get-admin-products-category&category=tools_systems";
+    $lmcpath = "https://cohrstage.coherent.com/api/?action=get-admin-products-category&category=lmc";
+    $componentspath = "https://cohrstage.coherent.com/api/?action=get-admin-products-category&category=components";
+    $laserspath = "https://cohrstage.coherent.com/api/?action=get-admin-products-category&category=lasers";
     $thirdparty = "D:/home/site/wwwroot/system/expressionengine/third_party/";
     $mapspath = "D:/home/site/wwwroot/assets/js/simplemaps/";
     $contactselectorpath = "D:/home/site/wwwroot/system/expressionengine/third_party/maps_updater/contact_selector/";
