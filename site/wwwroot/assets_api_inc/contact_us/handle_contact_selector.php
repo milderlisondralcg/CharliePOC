@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * @Author: Universal Programming 
  * @Date: 2018-07-18
@@ -9,6 +9,10 @@
  */
 
 require("D:/home/site/wwwroot/system/expressionengine/third_party/maps_updater/views/config.php");
+error_reporting(E_ERROR);
+
+$conn = null;
+dbconnect();
 
 $catList = array();
 $proList = array(); 
@@ -55,28 +59,89 @@ function is_defined(&$var){
     return $var;
 }
 function getVendor($cou, $cat = NULL, $pro = NULL, $type = "All"){
-    
+    global $conn;
     if(is_null($cat) && is_null($pro)){
-        $result = $GLOBALS["mysqli"]->query('SELECT * FROM maps_providers WHERE countries LIKE "%'.$cou.'%"');
+        //$result = $GLOBALS["mysqli"]->query('SELECT * FROM maps_providers WHERE countries LIKE "%'.$cou.'%"');
+		
+		$query = "SELECT * FROM `maps_providers` WHERE `countries` LIKE CONCAT('%',:cou,'%')";
+		$stmt = $conn->prepare($query);
+		$stmt->bindParam(':cou',$cou, PDO::PARAM_STR);
+		$stmt->execute();
+		
     }
     elseif(!is_null($cat) && is_null($pro)){
-        $result = $GLOBALS["mysqli"]->query('SELECT * FROM maps_providers WHERE countries LIKE "%'.$cou.'%" AND categories LIKE "%'.$cat.'%"');
+
+        //$result = $GLOBALS["mysqli"]->query('SELECT * FROM maps_providers WHERE countries LIKE "%'.$cou.'%" AND categories LIKE "%'.$cat.'%"');
+
+		$query = "SELECT * FROM `maps_providers` WHERE `countries` LIKE :cou AND `categories` LIKE :cat";
+		$stmt = $conn->prepare($query);
+		$cou = "%".$cou."%";
+		$cat = "%".$cat."%";
+
+		$stmt->bindParam(':cou',$cou, PDO::PARAM_STR);
+		$stmt->bindParam(':cat',$cat, PDO::PARAM_STR);
+		$stmt->execute();
+	
     }
     elseif(!is_null($cat) && !is_null($pro)){
         if($cat == "" && $type != "Training"){
-            $result = $GLOBALS["mysqli"]->query('SELECT * FROM maps_providers WHERE countries LIKE "%'.$cou.'%" AND products LIKE "%'.$pro.'%"' );
+            //$result = $GLOBALS["mysqli"]->query('SELECT * FROM maps_providers WHERE countries LIKE "%'.$cou.'%" AND products LIKE "%'.$pro.'%"' );
+			
+			$query = "SELECT * FROM `maps_providers` WHERE `countries` LIKE :cou AND `products` LIKE :pro";
+			$stmt = $conn->prepare($query);
+			$cou = "%".$cou."%";
+			$pro = "%".$pro."%";			
+			$stmt->bindParam(':cou',$cou, PDO::PARAM_STR);
+			$stmt->bindParam(':pro',$pro, PDO::PARAM_STR);
+			$stmt->execute();			
         }
         elseif($cat == "" && $type == "Training"){
-            $result = $GLOBALS["mysqli"]->query('SELECT * FROM maps_providers WHERE countries LIKE "%'.$cou.'%" AND trainings LIKE "%'.$pro.'%"' );
+            //$result = $GLOBALS["mysqli"]->query('SELECT * FROM maps_providers WHERE countries LIKE "%'.$cou.'%" AND trainings LIKE "%'.$pro.'%"' );
+			
+			$query = "SELECT * FROM maps_providers WHERE `countries` LIKE :cou AND `trainings` LIKE :pro";
+			$stmt = $conn->prepare($query);
+			$cou = "%".$cou."%";
+			$pro = "%".$pro."%";			
+			$stmt->bindParam(':cou',$cou, PDO::PARAM_STR);
+			$stmt->bindParam(':pro',$pro, PDO::PARAM_STR);
+			$stmt->execute();
+			
         }else{
             if($type == "Training"||$cat == "Training"){
-                $result = $GLOBALS["mysqli"]->query('SELECT * FROM maps_providers WHERE countries LIKE "%'.$cou.'%" AND categories LIKE "%'.$cat.'%" AND trainings LIKE "%'.$pro.'%"' );
+                //$result = $GLOBALS["mysqli"]->query('SELECT * FROM maps_providers WHERE countries LIKE "%'.$cou.'%" AND categories LIKE "%'.$cat.'%" AND trainings LIKE "%'.$pro.'%"' );
+				
+				$query = "SELECT * FROM maps_providers WHERE `countries` LIKE :cou AND `categories` LIKE :cat AND `trainings` LIKE :pro";
+				$stmt = $conn->prepare($query);
+				$cou = "%".$cou."%";
+				$cat = "%".$cat."%";
+				$pro = "%".$pro."%";			
+				$stmt->bindParam(':cou',$cou, PDO::PARAM_STR);
+				$stmt->bindParam(':cat',$cat, PDO::PARAM_STR);
+				$stmt->bindParam(':pro',$pro, PDO::PARAM_STR);
+				$stmt->execute();
+			
             }
             else{
-                $result = $GLOBALS["mysqli"]->query('SELECT * FROM maps_providers WHERE countries LIKE "%'.$cou.'%" AND categories LIKE "%'.$cat.'%" AND products LIKE "%'.$pro.'%"' );
+                //$result = $GLOBALS["mysqli"]->query('SELECT * FROM maps_providers WHERE countries LIKE "%'.$cou.'%" AND categories LIKE "%'.$cat.'%" AND products LIKE "%'.$pro.'%"' );
+				
+				$query = "SELECT * FROM maps_providers WHERE `countries` LIKE :cou AND `categories` LIKE :cat AND products LIKE :pro";
+				$stmt = $conn->prepare($query);
+				$cou = "%".$cou."%";
+				$cat = "%".$cat."%";
+				$pro = "%".$pro."%";			
+				$stmt->bindParam(':cou',$cou, PDO::PARAM_STR);
+				$stmt->bindParam(':cat',$cat, PDO::PARAM_STR);
+				$stmt->bindParam(':pro',$pro, PDO::PARAM_STR);
+				$stmt->execute();				
             }
         }
-    }
+    }	
+	
+	//Execute PDO
+	//$stmt = $conn->prepare($query);
+	//$stmt->execute();
+	$vendor_result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	
     if($cat == "Select a Category"){
         return getVendor($cou, NULL, NULL, $type);
     }
@@ -85,11 +150,22 @@ function getVendor($cou, $cat = NULL, $pro = NULL, $type = "All"){
     }
     
     $getabr = $GLOBALS["mysqli"]->query("SELECT abr FROM maps_state WHERE name LIKE '%".$cou."%' LIMIT 1");
+	
+ 	$query = "SELECT `abr` FROM `maps_state` WHERE `name` LIKE :cou LIMIT 1";
+	$stmt = $conn->prepare($query);
+	$cou = "%".$cou."%";
+	$stmt->bindParam(':cou',$cou, PDO::PARAM_STR);
+	$stmt->execute();
+	$abr_result = $stmt->fetchColumn();
+	//print_r($abr_result);
+				
     $abr = "";
-    $row2 = mysqli_fetch_assoc($getabr);
+    //$row2 = mysqli_fetch_assoc($getabr);
     $abr = $row2["abr"];
-    $sendData["abbr"] = $abr;
-    while($row = $result->fetch_assoc()){
+    //$sendData["abbr"] = $abr;
+	$sendData["abbr"] = $abr_result;
+    //while($row = $result->fetch_assoc()){
+	foreach($vendor_result as $row){
 
         $GLOBALS["catTemp"] = explode(",!%%!,", $row["categories"]);
         if(strpos($row["categories"],$type)!== FALSE || $type == "All"){
@@ -117,12 +193,14 @@ function getVendor($cou, $cat = NULL, $pro = NULL, $type = "All"){
             }
             sort($GLOBALS["proList"]);
         }
-        
-        foreach($GLOBALS["trainTemp"] as $value){
-            if($value != ""){
-               array_push($GLOBALS["trainList"], $value);
-            }
-        }
+		
+		foreach($GLOBALS["trainTemp"] as $value){
+			if($value != ""){
+			   array_push($GLOBALS["trainList"], $value);
+			}
+		}			
+
+
         
         $GLOBALS["vendTemp"] = $row["title"];
         $GLOBALS["couTemp"] = str_replace(",!%%!,", ",", $row["countries"]);
@@ -248,6 +326,32 @@ function compileContent($content){
         $i++;
     }
     return $out;
+}
+
+// DB Connection
+function dbconnect(){
+	global $conn;
+	
+	foreach ($_SERVER as $key => $value) {
+		if (strpos($key, "MYSQLCONNSTR_localdb") !== 0) {
+			continue;
+		}
+		
+		$db_host = preg_replace("/^.*Data Source=(.+?);.*$/", "\\1", $value);
+		$db_name = preg_replace("/^.*Database=(.+?);.*$/", "\\1", $value);
+		$db_user = preg_replace("/^.*User Id=(.+?);.*$/", "\\1", $value);
+		$db_pass = preg_replace("/^.*Password=(.+?)$/", "\\1", $value);
+	}		
+
+	try{
+		$conn = new PDO("mysql:host=" . $db_host . ";dbname=" . $db_name, $db_user, $db_pass);
+		$conn->exec("set names utf8");
+		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	}catch(PDOException $exception){
+		echo "Connection error: " . $exception->getMessage();
+	}
+
+	return $conn;
 }
 
 ?>
