@@ -49,6 +49,7 @@ $whitelist[33]="99.0.85.54";
 
 /* Milder */
 $whitelist[34]="107.198.92.213";
+$whitelist[100]="23.116.234.211";
 
 /* Alphonso */
 $whitelist[35]="73.202.200.242";
