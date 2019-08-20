@@ -1,4 +1,4 @@
-<?php error_reporting(0);
+<?php error_reporting(E_ALL);
 /*
  * @Author: Universal Programming 
  * @Date: 2018-03-12

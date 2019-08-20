@@ -11,7 +11,8 @@ class Maps_updater_mcp {
 		$this->form_base = 'C=addons_modules'.AMP.'M=show_module_cp'.AMP.'module='.$this->module_name;
 		$this->EE->cp->set_right_nav(array(
 			'home'			=> $this->base,
-			'publish'		=> "#",
+			'Save to Staging'		=> "#",
+			'Publish to Website' => "#"
 		));
 
 		$this->EE->load->add_package_path(PATH_THIRD.'maps_updater/');

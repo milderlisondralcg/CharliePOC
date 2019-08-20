@@ -66,17 +66,32 @@
 ?>
 <script>
 $(window).ready(function(){ 
-    $('a[title="Publish"]').click(function(){
-        $.ajax({
+    $('a[title="Save to Staging"]').click(function(){ 
+	console.log("Save to Staging");
+         $.ajax({
             url: '<?php echo $views ?>publish.php',
             type: 'POST',
             data: {
-                publish: "true"
+                action: "publish"
             },
             success: function(msg) {
             }               
         });
     });
+
+    $('a[title="Publish to Website"]').click(function(){ 
+	console.log("Publish to Website");
+         $.ajax({
+            url: '<?php echo $views ?>publish.php',
+            type: 'POST',
+            data: {
+                action: "publish_production"
+            },
+            success: function(msg) {
+            }               
+        });
+    });
+	
 });     
 </script>
 <?php

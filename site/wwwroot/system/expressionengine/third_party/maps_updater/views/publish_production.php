@@ -56,7 +56,7 @@ $blobClient = BlobRestProxy::createBlobService($connectionString);
         for($i = 0; $i < count($lasers); $i++){
             array_push($allproducts, str_replace('"', '\"', $lasers[$i]["Name"]));
         }
-       
+
         $allproducts = array_unique($allproducts);
         $allproducts = array_values($allproducts);
         $removeallproducts = $mysqli->query("truncate maps_products");
@@ -103,10 +103,10 @@ $blobClient = BlobRestProxy::createBlobService($connectionString);
             }
         }
     }
-    //if(isset($_POST["publish"])){
-	if( ($_POST["action"] == "publish") || ($_POST["action"] == "publish_production") ){
+    if(isset($_POST["action"]) && ($_POST["action"] == "publish_production")){		
+		
 		$mapspath = "D:\\home\\site\\wwwroot\\assets\\js\\simplemaps\\";
-		$json_filename = "mapdata.js";
+		$json_filename = "mapdata_production.js";
         $state = $mysqli->query("SELECT * FROM maps_state");
         $settings = $mysqli->query("SELECT * FROM maps_settings");
         $location = $mysqli->query("SELECT * FROM maps_location order by `group` DESC");
@@ -132,6 +132,7 @@ $blobClient = BlobRestProxy::createBlobService($connectionString);
             }
             $state_specific[$row['abr']] = $group;
         };
+		
 		// Location (a.k.a Points in the Maps Updater admin )
         while($row = $location->fetch_assoc()){
             $group = array();
@@ -162,26 +163,18 @@ $blobClient = BlobRestProxy::createBlobService($connectionString);
         $publishMap['main_settings'] = $main_settings;
         $publishMap['state_specific'] = $state_specific;
         $publishMap['locations'] = $locations;
-/*         $myfile = fopen($mapspath."mapdata.js", "w");
-        fwrite($myfile,"var simplemaps_worldmap_mapdata=".json_encode($publishMap, JSON_PRETTY_PRINT).";");
-		fclose($myfile); */
-		
+
 		$filepath = $mapspath.$json_filename;
         $myfile = fopen($filepath, "w");
         fwrite($myfile,"var simplemaps_worldmap_mapdata=".json_encode($publishMap, JSON_PRETTY_PRINT).";");
 		$handle = fopen($filepath, "r");
 		$contents = fread($handle, filesize($filepath));
 
-		// Publish to Production
-		if( $_POST['action'] == "publish_production" ){
-			//Upload JSON file to Azure Blob Storage
-			$containerName = "maps-updater";
-			$azure_upload_result = $blobClient->createBlockBlob($containerName, "mapdata.js", $contents);	
-			print 'db prod';
-			dbconnect_production();
-		}
-
-		fclose($myfile);	
+		//Upload JSON file to Azure Blob Storage
+		$containerName = "maps-updater";
+		$azure_upload_result = $blobClient->createBlockBlob($containerName, "mapdata.js", $contents);
+		
+		fclose($myfile);		
 		
     }
 	
@@ -189,8 +182,10 @@ $blobClient = BlobRestProxy::createBlobService($connectionString);
     function compileContent($content){
         require("config.php");
 		// Field maps_custom_products does not exist in table maps_providers
-        $providers = $mysqli->query("SELECT title, address, phone, email, website, countries, additional, priority, visible, sales_phone, sales_email, service_phone, service_email, training_phone, training_email FROM maps_providers");
-		$outArray = array();
+        //$providers = $mysqli->query("SELECT title, address, phone, email, website, countries, maps_custom_products, additional, priority, visible FROM maps_providers");
+		$providers = $mysqli->query("SELECT title, address, phone, email, website, countries, additional, priority, visible, sales_phone, sales_email, service_phone, service_email, training_phone, training_email FROM maps_providers");
+		//$providers = $mysqli->query("SELECT title, address, phone, email, website, countries, products, additional, priority, visible FROM maps_providers ORDER BY title ASC");
+        $outArray = array();
         $out = "";
 
         while($row = $providers->fetch_assoc()){
@@ -243,10 +238,12 @@ $blobClient = BlobRestProxy::createBlobService($connectionString);
 						if($row["countries"] != ""){
 							$countries = "Locations Supported: ".str_replace(",!%%!,", ", ", $row["countries"]);
 						}
-						if(array_key_exists("products",$row)){
+						if(array_key_exists("products",$row)){  
+						//if($row["products"] !== ""){
 							$products_list = str_replace(",!%%!,", ", ", $row["products"]);
 							$product = "<br><br><b>Products Supported:</b> " .$row["products_list"];
 						}
+						//$outArray[$title . $address . $phone . $email . $website . $additional . $countries . $product] = $row['priority'];
 						$outArray[$title . $address . $phone . $email . $website . $sales . $service . $training . $additional . $countries] = $row['priority'];
 					}
 				}
@@ -267,32 +264,4 @@ $blobClient = BlobRestProxy::createBlobService($connectionString);
         }
         return $out;
     }
-	
-// DB Connection
-function dbconnect_production(){
-	$conn;
-	print 'db prod';
-	foreach ($_SERVER as $key => $value) {
-		if (strpos($key, "DB_MYSQL_PROD_A1") !== 0) {
-			continue;
-		}
-		
-		$db_host = preg_replace("/^.*Data Source=(.+?);.*$/", "\\1", $value);
-		$db_name = preg_replace("/^.*Database=(.+?);.*$/", "\\1", $value);
-		$db_user = preg_replace("/^.*User Id=(.+?);.*$/", "\\1", $value);
-		$db_pass = preg_replace("/^.*Password=(.+?)$/", "\\1", $value);
-		
-		print $db_host;
-	}		
-
-/* 	try{
-		$conn = new PDO("mysql:host=" . $db_host . ";dbname=" . $db_name, $db_user, $db_pass);
-		$conn->exec("set names utf8");
-		$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-	}catch(PDOException $exception){
-		echo "Connection error: " . $exception->getMessage();
-	} */
-
-	//return $conn;
-}	
 ?>
