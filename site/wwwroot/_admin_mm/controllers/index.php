@@ -14,8 +14,8 @@ $auth = new Auth();
 
 /***************** Load Azure classes **************************/
 
-require_once '../../azureblob/vendor/autoload.php';
-//require_once "./random_string.php";
+require_once '../../../../../azureblob/vendor/autoload.php';
+
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
 use MicrosoftAzure\Storage\Blob\Models\ListBlobsOptions;
