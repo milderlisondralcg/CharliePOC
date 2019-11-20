@@ -20,12 +20,14 @@ $(document).ready(function (e) {
 		$("#err").fadeOut();
 		$("#upload_notification").html("Processing...please standby");
 	   },
-	   success: function(data){
+	   success: function(data){ console.log(data.result);
 			if(data.result == 'invalid'){
 			 // invalid file format.
 			 $("#upload_notification").html("Invalid File !").fadeIn();
 			} else if(data.result == 'duplicate title') {
 				$("#upload_notification").html("There is already an entry with that Title.").fadeIn();
+			} else if( data.result == 'upload error' ){
+				$("#upload_notification").html("A problem occurred while trying to store the file into Azure Storage. Please contact the Marcom Web department.").fadeIn();
 			} else {
 			 $("#add-media")[0].reset();
 			 
