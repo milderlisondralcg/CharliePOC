@@ -14,7 +14,7 @@ $auth = new Auth();
 
 /***************** Load Azure classes **************************/
 
-require_once '../../../../../azureblob/vendor/autoload.php';
+require_once '../../azureblob/vendor/autoload.php';
 
 use MicrosoftAzure\Storage\Blob\BlobRestProxy;
 use MicrosoftAzure\Storage\Common\Exceptions\ServiceException;
@@ -40,7 +40,6 @@ $blobClient = BlobRestProxy::createBlobService($connectionString);
 // Uploads location
 $uploads_path = "../uploads/";
 $action = "";
-//define("DIRECT_TO_FILE_URL", "https://content.coherent.com/"); // Production
 
 // check for action requested
 if( isset($_POST['action']) ){
@@ -100,21 +99,9 @@ switch($action){
 			$data['source_container'] = $media_info['Folder'];
 			$data['source_blob'] = $media_info['SavedMedia'];
 			$data['destination_blob'] = time() . "-" . $media_info['SavedMedia'];
-			/*
-				switch($media_info['Folder']){
-					case "file":
-						$data['destination_container'] = "file-archive";
-						break;
-					case "assets":
-						$data['destination_container'] = "assets-archive";
-						break;
-					case "m-lmc":
-						$data['destination_container'] = "m-lmc-archive";
-						break;								
-				}
-				*/
-				$data['destination_container'] = $media_info['Folder'] . '-archive';
-				extract($data);
+			
+			$data['destination_container'] = $media_info['Folder'] . '-archive';
+			extract($data);
 
 			copy_media($data);
 			delete_media($data);
@@ -138,21 +125,7 @@ switch($action){
 				$all_links = '<a href="'.$direct_link_to_file.'" target="_blank">'.$direct_link_to_file.'</a> ( CDN - Use This )<br/><br/>';
 				$all_links .= '<a href="'.$public_link_to_file.'" target="_blank">'.$public_link_to_file.'</a> ( Special Relative Link )';
 				$last_modified = date("m/d/Y", strtotime($CreatedDateTime)); // friendly date and time format
-				/*
-				switch($Folder){
-					case "file":
-						$Category = "File";
-						break;
-					case "assets":
-						$Category = "Assets";
-						break;
-					case "emailer":
-						$Category = "Emailer";
-						break;
-					case "m-lmc":
-						$Category = "M-LMC";
-						break;						
-				}*/
+				
 				$all_media[] = array("DT_RowId"=>$MediaID,"Title"=>$Title,"Category"=>$Category,"Description"=>$Description,"LinkToFile"=>$all_links,"LastModified"=>$last_modified,"Tags"=>$Tags,"ActionDelete"=>"Archive","ActionEdit"=>"Edit","Folder"=>ucfirst($Folder));
 			}
 			print json_encode(array("data"=>$all_media));		
@@ -186,7 +159,7 @@ switch($action){
 					// get uploaded file's extension
 					$ext = strtolower(pathinfo($uploaded_filename, PATHINFO_EXTENSION));
 
-					// check's valid format
+					// Check that format/file type is valid
 					if(in_array($ext, $valid_extensions)) { 
 
 						$moved_filename = trim(strtolower($uploaded_filename));
@@ -209,25 +182,39 @@ switch($action){
 								$title_temp = strtolower($_POST['Title']);
 								$title_temp = preg_replace('/[^a-zA-Z0-9\']/', '-', $title_temp); // remove special characters
 								$title_temp = str_replace("'", '', $title_temp); // remove apostrophes
-									
-								/* if(substr($title_temp,-1,1) == "-"){
-									$title_temp = substr($title_temp,0,strlen($title_temp) - 1);
-								} */
 								$title_temp = trim(preg_replace('/-+/', '-', $title_temp), '-'); // remove double dash and trailing dash
 
 								
-								$seo_url = $result['MediaID'] . "-" . $title_temp . "." . $ext;
-								$azure_filename = $result['MediaID'] . "-" . $title_temp . "." . $ext;
+								//$seo_url = $result['MediaID'] . "-" . $title_temp . "." . $ext;
+								$seo_url = $title_temp . "." . $ext;
+								//$azure_filename = $result['MediaID'] . "-" . $title_temp . "." . $ext;
+								$azure_filename = $title_temp . "." . $ext;
 								// Update the record with the filename actually stored in Azure and the properly formatted SeoUrl
 								$update_data = array("SavedMedia"=>$azure_filename,"MediaID"=>$result['MediaID'], "SeoUrl"=>$seo_url);
 								$media->update_savedmedia_seourl($update_data);
 								$containerName = $folder;
 								$content = fopen($final_path, "r");
 								//Upload media asset to Azure Blob Storage
-								$azure_upload_result = $blobClient->createBlockBlob($containerName, $azure_filename, $content);	
-								$result['direct_url'] =  DIRECT_TO_FILE_URL . $containerName . "/" . $azure_filename ;
-								$result['processed_url'] =  PROCESSED_URL . $seo_url ;
-								print json_encode($result);
+								try{
+									$azure_upload_result = $blobClient->createBlockBlob($containerName, $azure_filename, $content);	
+									$result['direct_url'] =  DIRECT_TO_FILE_URL . $containerName . "/" . $azure_filename ;
+									$result['processed_url'] =  PROCESSED_URL . $seo_url ;
+									print json_encode($result);
+								}catch( ServiceException $e ){
+									// Archive the Media record just so that it is not visible within dashboard
+									$media->delete($result['MediaID']);
+									//print_r($e->getMessage());
+									$error_message = 'Media attempted to store in Azure Blob Storage: ' . $azure_filename. "\r\n";
+									$error_message .= 'Container to be used: ' . $containerName. "\r\n";
+									$error_message .= "Error returned by Azure Blob Storage: \r\n";
+									$error_message .= $e->getMessage();
+									$log_data = array("user"=>$_SESSION['username'],"action"=>"Transfer media to Azure Blob Storage","object"=>$azure_filename,"previous_data"=>"N/A","updated_data"=>$error_message);
+									$media->log_action($log_data); // Log admin action	
+									$result = array();
+									$result['result'] = 'upload error';
+									
+									print json_encode($result); 
+								}
 							}else{
 								print json_encode($result);
 							}
