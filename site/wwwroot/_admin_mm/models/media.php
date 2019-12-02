@@ -31,7 +31,7 @@ class Media extends Database{
 		if($folder !== ""){
 			$query = "SELECT `MediaID`,`Title`,`Description`,`Category`,`SeoUrl`,`SavedMedia`,`CreatedDateTime`,`Folder`,`Tags`,`Type` FROM `".$this->media."` WHERE `Status`='Active' AND Folder = '".$folder."'";
 		}else{
-			$query = "SELECT `MediaID`,`Title`,`Description`,`Category`,`SeoUrl`,`SavedMedia`,`CreatedDateTime`,`Folder`,`Tags`,`Type` FROM `".$this->media."` WHERE `Status`='Active'";
+			$query = "SELECT `MediaID`,`Title`,`Description`,`Category`,`SeoUrl`,`SavedMedia`,`CreatedDateTime`,`Folder`,`Tags`,`Type` FROM `".$this->media."` WHERE `Status`='Active' ORDER BY `CreatedDateTime` DESC";
 		}
 		
 		$stmt = $this->conn->prepare($query);	
