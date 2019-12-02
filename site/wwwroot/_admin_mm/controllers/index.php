@@ -11,6 +11,7 @@ function mmAutoloader($className){
 
 $media = new Media();
 $auth = new Auth();
+$mmlog = new MMLog();
 
 /***************** Load Azure classes **************************/
 
@@ -120,10 +121,19 @@ switch($action){
 		if( $result !== 0){
 			foreach( $result as $row){
 				extract($row);
+				
 				$direct_link_to_file = DIRECT_TO_FILE_URL . $Folder . "/" . $SavedMedia;
 				$public_link_to_file = PROCESSED_URL .  $SeoUrl;
-				$all_links = '<a href="'.$direct_link_to_file.'" target="_blank">'.$direct_link_to_file.'</a> ( CDN - Use This )<br/><br/>';
-				$all_links .= '<a href="'.$public_link_to_file.'" target="_blank">'.$public_link_to_file.'</a> ( Special Relative Link )';
+				$all_links = '<a href="'.$direct_link_to_file.'" target="_blank">'.$direct_link_to_file.'</a>';
+
+				$log_data = $mmlog->get_by_id($MediaID);
+				if( isset($log_data['Data_Blob']) ){
+					$data_blob = json_decode($log_data['Data_Blob']);
+					$all_links .= '<br/><br/>Original Filename: '. $data_blob->Original_Filename .'</a>';
+				}
+				
+				//$all_links = '<a href="'.$direct_link_to_file.'" target="_blank">'.$direct_link_to_file.'</a> ( CDN - Use This )<br/><br/>';
+				//$all_links .= '<a href="'.$public_link_to_file.'" target="_blank">'.$public_link_to_file.'</a> ( Special Relative Link )';
 				$last_modified = date("m/d/Y", strtotime($CreatedDateTime)); // friendly date and time format
 				
 				$all_media[] = array("DT_RowId"=>$MediaID,"Title"=>$Title,"Category"=>$Category,"Description"=>$Description,"LinkToFile"=>$all_links,"LastModified"=>$last_modified,"Tags"=>$Tags,"ActionDelete"=>"Archive","ActionEdit"=>"Edit","Folder"=>ucfirst($Folder));
@@ -176,9 +186,13 @@ switch($action){
 							
 							if( $result['result'] === true){
 
+								
 								$log_data = array("user"=>$_SESSION['username'],"action"=>"Add new media","object"=>$result['MediaID'],"previous_data"=>"N/A","updated_data"=>$file_mime_type);
+								$log_data['Original_Filename'] = $uploaded_filename;
+								$log_data['data_blob'] = json_encode($log_data);
 								$media->log_action($log_data); // Log admin action
-							
+
+								
 								$title_temp = strtolower($_POST['Title']);
 								$title_temp = preg_replace('/[^a-zA-Z0-9\']/', '-', $title_temp); // remove special characters
 								$title_temp = str_replace("'", '', $title_temp); // remove apostrophes
