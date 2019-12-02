@@ -34,7 +34,7 @@ $(document).ready(function (e) {
 			 var message = "";
 			 message = "Media has been successfully uploaded<br>";
 			 message += "Web page URL: " + data.direct_url + "<br>";
-			 message += "SEO URL: " + data.processed_url;
+			 //message += "SEO URL: " + data.processed_url;
 			 $("#upload_notification").html(message);
 			}
 		},
