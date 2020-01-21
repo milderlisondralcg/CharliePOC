@@ -15,7 +15,8 @@ $action = $_REQUEST['action'];
 switch($action){
 	case "publish":
 	case "get_business":
-		$result = $media->get_media_by_folder("optoskand");
+		$product_family = trim($_POST['product_family']);
+		$result = $media->get_media_by_folder($product_family);		
 		$data = array();
 		$MimeType = "";
 		foreach($result as $key=>$value){
@@ -84,10 +85,7 @@ switch($action){
 			}
 		}	
 
-		
-	/* 			print '<pre>';
-				print_r($data);
-				print '</pre>'; */
+
 $html_output = '';
 foreach( $data as $key=>$value){
 	
@@ -155,7 +153,8 @@ $html_output .='
 		print $html_output;
 				
 		$dest_directory = "../../App_Constant/";
-		$filename = "optoskand.html";
+		//$filename = "optoskand.html";
+		$filename = $product_family . ".html";
 		$dest_path = $dest_directory .  $filename;
 		$handle = fopen($dest_path, 'w') or die('Cannot open file:  '.$dest_path);
 		//$string_to_write = json_encode($data);
