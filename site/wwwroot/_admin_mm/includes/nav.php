@@ -6,7 +6,8 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-					<a href="add.php" class="navbar-brand">Add General Media</a>
+					<a href="add.php" class="navbar-brand">Add Media</a>
+					<a href="view_activity.php" class="navbar-brand">View Activity</a>
 					<a href="publish.php" class="navbar-brand">Publish JSON</a>
                 </div>
 
