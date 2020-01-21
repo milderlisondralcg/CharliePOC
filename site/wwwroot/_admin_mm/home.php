@@ -16,6 +16,7 @@ include('includes/header.php');
                                 <th>Title</th>
 								<th>Folder</th>
                                 <th>Category</th>
+								<td>Group</td>
                                 <th>Description</th>
 								<th>Link To File</th>
 								<th>Tags</th>
@@ -29,6 +30,7 @@ include('includes/header.php');
                                 <th>Title</th>
 								<th>Folder</th>
                                 <th>Category</th>
+								<td>Group</td>
                                 <th>Description</th>
 								<th>Link To File</th>
 								<th>Tags</th>
@@ -42,6 +44,7 @@ include('includes/header.php');
                                     <td>Title</td>
 									<th>Folder</th>
 									<td>Category</td>
+									<td>Group</td>
 									<td>Description</td>
 									<td>Link To File</td>
 									<td>Tags</td>
@@ -75,6 +78,7 @@ include('includes/header.php');
 				{ data: 'Title' },
 				{ data: 'Folder' },
 				{ data: 'Category' },
+				{ data: 'Group' },
 				{ data: 'Description' },
 				{ data: 'LinkToFile' },
 				{ data: 'Tags' },
@@ -83,19 +87,24 @@ include('includes/header.php');
 				{ data: 'ActionEdit' }
 			],
 			"columnDefs": [
-				{ className: "action_delete", "targets": [ 7 ] },
-				{ className: "action_edit", "targets": [ 8 ] },
-				{ className: "links", "targets": [ 4 ] }
+				{ className: "action_delete", "targets": [ 8 ] },
+				{ className: "action_edit", "targets": [ 9 ] },
+				{ className: "links", "targets": [ 5 ] }
 			  ],
-			"order": [[ 6, "desc" ]] // sort by Last Modified Date, descending
+			"order": [[ 7, "desc" ]] // sort by Last Modified Date, descending
 		});
 		
 		$('#media_list tbody').on( 'click',  'td.action_delete', function () {			
 			var media_id = $(this).parent().attr("id");	
 				if( confirm("Are you sure you want to Archive this Media asset?") ){
-					mydatatable.row( $(this).parents('tr') ).remove().draw(); // delete row from data table
-					// send request to delete from DB
-					$.post("/_admin_mm/controllers/",{"MediaID":media_id,"action":"delete"});
+					$.post("/_admin_mm/controllers/",{"MediaID":media_id,"action":"delete"},function(data){
+						if(data.result == true){
+							$("#"+media_id).remove(); // delete row from data table
+							alert("The Media asset has been Archived");
+						}else{
+							alert("There was a problem Archiving the Media asset. Please notify an administrator.");
+						}
+					},"json");
 				}
 		});	
 		
