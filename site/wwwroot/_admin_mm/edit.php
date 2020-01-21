@@ -27,7 +27,7 @@ if( $_SERVER['SERVER_NAME'] == "charlie.coherent.com" ){
 <div class="main-wrapper">
     <div class="contents">
         <div class="heading">
-            <h2>Add Media</h2>
+            <h2>Edit Media</h2>
         </div>
 
         <div class="page-contents">
@@ -69,7 +69,15 @@ if( $_SERVER['SERVER_NAME'] == "charlie.coherent.com" ){
 			<div class="form-col-input">
 				<input class="form-control text-box single-line" id="Tags" name="Tags" type="text" value="<?php print $Tags; ?>" />
 			</div>
-		</div>		
+		</div>	
+		<div class="form-row">
+			<div class="form-col-label">
+				<label class="control-label" for="Group">Group(s)  &nbsp; <em>- separate groups by commas</em></label>
+			</div>
+			<div class="form-col-input">
+				<input class="form-control text-box single-line" id="Group" name="Group" type="text" value="<?php print $Group; ?>" />
+			</div>
+		</div>			
 
 		<div class="form-row">
 			<div class="form-col-label">
