@@ -88,6 +88,14 @@ $tags_array = $media->get_tags();
 				<input class="form-control text-box single-line" id="Tags" name="Tags" type="text" value="" />
 			</div>
 		</div>		
+		<div class="form-row">
+			<div class="form-col-label">
+				<label class="control-label" for="Group">Group(s)  &nbsp; <em>- separate groups by commas</em> </label>
+			</div>
+			<div class="form-col-input">
+				<input class="form-control text-box single-line" id="Group" name="Group" type="text" value="" />
+			</div>
+		</div>		
 
 		<div class="form-row">
 			<div class="form-col-label">
