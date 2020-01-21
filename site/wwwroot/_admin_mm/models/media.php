@@ -29,9 +29,9 @@ class Media extends Database{
 	*/
 	public function get_media_all( $folder = "optoskand" ){
 		if($folder !== ""){
-			$query = "SELECT `MediaID`,`Title`,`Description`,`Category`,`SeoUrl`,`SavedMedia`,`CreatedDateTime`,`Folder`,`Tags`,`Type` FROM `".$this->media."` WHERE `Status`='Active' AND Folder = '".$folder."'";
+			$query = "SELECT `MediaID`,`Title`,`Description`,`Category`,`SeoUrl`,`SavedMedia`,`CreatedDateTime`,`Folder`,`Tags`,`Type`, `Group` FROM `".$this->media."` WHERE `Status`='Active' AND Folder = '".$folder."'";
 		}else{
-			$query = "SELECT `MediaID`,`Title`,`Description`,`Category`,`SeoUrl`,`SavedMedia`,`CreatedDateTime`,`Folder`,`Tags`,`Type` FROM `".$this->media."` WHERE `Status`='Active' ORDER BY `CreatedDateTime` DESC";
+			$query = "SELECT `MediaID`,`Title`,`Description`,`Category`,`SeoUrl`,`SavedMedia`,`CreatedDateTime`,`Folder`,`Tags`,`Type`, `Group` FROM `".$this->media."` WHERE `Status`='Active' ORDER BY `CreatedDateTime` DESC";
 		}
 		
 		$stmt = $this->conn->prepare($query);	
@@ -46,7 +46,7 @@ class Media extends Database{
 					//$tags = implode( ", ",$this->get_media_tags($row['MediaID']) );
 					//$results[] = array("MediaID"=>$row['MediaID'],"Title"=>$row['Title'],"Category"=>$row['Category'],"Description"=>$row['Description'],"SavedMedia"=>$SavedMedia,"SeoUrl"=>$SeoUrl,"CreatedDateTime"=>$CreatedDateTime,"Tags"=>$tags,"Folder"=>$row['Folder']);
 				//}else{
-					$results[] = array("MediaID"=>$row['MediaID'],"Title"=>$row['Title'],"Category"=>$row['Category'],"Description"=>$row['Description'],"SavedMedia"=>$SavedMedia,"SeoUrl"=>$SeoUrl,"CreatedDateTime"=>$CreatedDateTime,"Tags"=>$Tags,"Folder"=>$Folder,"Type"=>$Type);
+					$results[] = array("MediaID"=>$row['MediaID'],"Title"=>$row['Title'],"Category"=>$row['Category'],"Description"=>$row['Description'],"SavedMedia"=>$SavedMedia,"SeoUrl"=>$SeoUrl,"CreatedDateTime"=>$CreatedDateTime,"Tags"=>$Tags,"Folder"=>$Folder,"Type"=>$Type,"Group"=>$Group);
 				//}
 			}
 			return $results;
@@ -62,18 +62,12 @@ class Media extends Database{
 	* @param integer $MediaID
 	*/
 	public function get($MediaID){
-		$query = "SELECT `Title`,`Description`,`Category`,`SavedMedia`,`SeoUrl`,`Folder`,`Tags` FROM `".$this->media."` WHERE `MediaID`=:MediaID";
+		$query = "SELECT `Title`,`Description`,`Category`,`SavedMedia`,`SeoUrl`,`Folder`,`Tags`,`Group` FROM `".$this->media."` WHERE `MediaID`=:MediaID";
 		$stmt = $this->conn->prepare($query);
 		$stmt->bindValue(':MediaID',$MediaID, PDO::PARAM_INT);
 		$stmt->execute();	
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		if( count($result) > 0 ){
-/* 			if( $this->get_media_tags($MediaID) > 0){
-				$tags = implode( " ",$this->get_media_tags($MediaID));
-				$result['tags'] = $tags;
-			}else{ 
-				$result['tags'] = "";
-			} */
 			return $result;
 		}else{
 			return 0;
@@ -113,7 +107,7 @@ class Media extends Database{
 			if($Tags == "" || !isset($Tags)){
 				$Tags = "Other";
 			}			
-			$stmt = $this->conn->prepare("INSERT INTO `".$this->media."` (Title,Description,Type,SavedMedia, Category, Folder, Tags) VALUES (:Title, :Description, :Type, :SavedMedia,:Category,:Folder, :Tags)");
+			$stmt = $this->conn->prepare("INSERT INTO `".$this->media."` (Title,Description,Type,SavedMedia, Category, Folder, Tags, `Group`) VALUES (:Title, :Description, :Type, :SavedMedia,:Category,:Folder, :Tags,:Group)");
 			$stmt->bindParam(':Title',$title, PDO::PARAM_STR);
 			$stmt->bindParam(':Description',$description, PDO::PARAM_STR);
 			$stmt->bindParam(':Type',$type, PDO::PARAM_STR);
@@ -125,6 +119,9 @@ class Media extends Database{
 			$tags_clean = rtrim($Tags,", ");
 			$stmt->bindParam(':Tags',$tags_clean, PDO::PARAM_STR);
 			
+			$group_clean = rtrim($Group,", ");
+			$stmt->bindParam(':Group',$group_clean, PDO::PARAM_STR);
+			
 			$title =  $data['Title'];
 			$description = $data['Description'];
 			$type = $data['Type'];
@@ -133,21 +130,24 @@ class Media extends Database{
 			$folder = $data['Folder'];
 			$tags = $data['Tags'];
 			
-			
-			if($stmt->execute()){
-				$data['MediaID'] = $this->conn->lastInsertId();
-				// check to see if there Tags is available
-				/*
-				if( strlen(trim($data['Tags'])) > 0 ){
-					$this->add_media_tags($data); // add tags for given media					
-				}
-				*/
-				//$this->add_media_tags($data); // add tags for given media
-				$media_attribs = array("ID"=>$data['MediaID'],"attributes"=>$data);
-				$this->add_media_attributes($media_attribs); // add attributes of given media
-				$result = array("MediaID"=>$data['MediaID'],"result"=>true);
-				return $result;
-				}else{ return false; }
+			try{
+				if($stmt->execute()){
+					$data['MediaID'] = $this->conn->lastInsertId();
+					// check to see if there Tags is available
+					/*
+					if( strlen(trim($data['Tags'])) > 0 ){
+						$this->add_media_tags($data); // add tags for given media					
+					}
+					*/
+					//$this->add_media_tags($data); // add tags for given media
+					$media_attribs = array("ID"=>$data['MediaID'],"attributes"=>$data);
+					$this->add_media_attributes($media_attribs); // add attributes of given media
+					$result = array("MediaID"=>$data['MediaID'],"result"=>true);
+					return $result;
+					}else{ return false; }
+			}catch( PDOException $e ){
+				print_r($e);
+			}
 		}else{
 			$result = array("result"=>"duplicate title");
 			return $result;
@@ -251,21 +251,27 @@ class Media extends Database{
 			if($Tags == "" || !isset($Tags)){
 				$Tags = "Other";
 			}				
-			$stmt = $this->conn->prepare("UPDATE `".$this->media."` SET `Title`=:Title, `Description`=:Description, `ModifiedDateTime`=:ModifiedDateTime, `Category`=:Category,`Tags`=:Tags WHERE `MediaID`=:MediaID");
+			$stmt = $this->conn->prepare("UPDATE `".$this->media."` SET `Title`=:Title, `Description`=:Description, `ModifiedDateTime`=:ModifiedDateTime, `Category`=:Category,`Tags`=:Tags, `Group`=:Group WHERE `MediaID`=:MediaID");
 			$stmt->bindValue(':MediaID',$MediaID, PDO::PARAM_INT);
 			$stmt->bindValue(':Description',$Description, PDO::PARAM_INT);
 			$stmt->bindValue(':Title',$Title, PDO::PARAM_INT);
 			$stmt->bindValue(':ModifiedDateTime',$this->ts, PDO::PARAM_STR);
 			$stmt->bindValue(':Category',rtrim($Category,", "), PDO::PARAM_STR);
 			$stmt->bindValue(':Tags',rtrim($Tags,", "), PDO::PARAM_STR);
+			$stmt->bindValue(':Group',rtrim($Group,", "), PDO::PARAM_STR);
 		
+			$previous_media_data = $this->get($MediaID);
+			
 			if($stmt->execute()){
-				// check to see if there Tags is available
-/* 				if( strlen(trim($data['Tags'])) > 0 ){
-					$this->delete_media_tags($MediaID);
-					$this->add_media_tags($data); // add tags for given media					
-				} */
 				$result = array("MediaID"=>$MediaID,"result"=>true);
+				
+				$log_data['user'] = $_SESSION['username'];
+				$log_data['action'] = 'Update Media';
+				$log_data['object'] = $MediaID;
+				$log_data['previous_data'] = json_encode($previous_media_data);
+				$log_data['updated_data'] = json_encode($data);
+				
+				$this->log_action($log_data);
 				return true;
 			}else{ return false; }
 				
@@ -311,7 +317,22 @@ class Media extends Database{
 		$query = "UPDATE `".$this->media."` SET `Status` = 'Archived' WHERE `MediaID`=:MediaID";
 		$stmt = $this->conn->prepare($query);
 		$stmt->bindValue(':MediaID',$MediaID, PDO::PARAM_INT);
-		$stmt->execute();
+		if($stmt->execute()){
+			// @param array $data (user,action,object,previous_data,update_data)
+			$log_data['user'] = $_SESSION['username'];
+			$log_data['action'] = 'Media Record Archived';
+			$log_data['object'] = $MediaID;
+			$log_data['previous_data'] = '';
+			$log_data['updated_data'] = '';
+			$this->log_action($log_data);
+		}else{
+			$log_data['user'] = $_SESSION['username'];
+			$log_data['action'] = 'Unable to Archive Media';
+			$log_data['object'] = $MediaID;
+			$log_data['previous_data'] = '';
+			$log_data['updated_data'] = '';
+			$this->log_action($log_data);			
+		}
 		return $stmt->rowCount();
 	}
 	
@@ -369,7 +390,32 @@ class Media extends Database{
 			return 0;
 		}
 		
-	}	
+	}
+
+	/**
+	* get_by_group
+	* Retrieve records using given parameter
+	* @param string $group
+	*/
+	public function get_by_group( $group ){
+		// Select using LIKE
+		$group = strtolower($group);
+		$query = "SELECT * FROM `".$this->media."` WHERE `Status`='Active' AND `Group` LIKE '%".$group."%'";
+		$stmt = $this->conn->prepare($query);	
+		$stmt->execute();
+		$all_results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+		if( count($all_results) > 0 ){
+			foreach( $all_results as $row ){
+				extract($row);
+				$results[] = array("MediaID"=>$row['MediaID'],"Title"=>$row['Title'],"Category"=>$row['Category'],"Description"=>$row['Description'],"SavedMedia"=>$SavedMedia,"SeoUrl"=>$SeoUrl,"CreatedDateTime"=>$CreatedDateTime,"Tags"=>$Tags,"Folder"=>$Folder,"Type"=>$Type);
+			}
+			return $results;
+		}else{
+			return 0;
+		}		
+		
+	}
 	
 	/*
 	* get_tags
