@@ -1,6 +1,6 @@
 <?php
 session_start();
-error_reporting(E_ALL);
+error_reporting(E_ERROR);
 spl_autoload_register('mmAutoloader');
 
 function mmAutoloader($className){
@@ -95,7 +95,6 @@ switch($action){
 	case "delete":
 		extract($_POST);
 		$media_info = $media->get($MediaID);
-		if($media->delete($MediaID) == 1){
 
 			$data['source_container'] = $media_info['Folder'];
 			$data['source_blob'] = $media_info['SavedMedia'];
@@ -104,13 +103,15 @@ switch($action){
 			$data['destination_container'] = $media_info['Folder'] . '-archive';
 			extract($data);
 
-			copy_media($data);
-			delete_media($data);
-			
-			$log_data = array("user"=>"milder.lisondra@yahoo.com","action"=>"Media Archived","object"=>$MediaID,"previous_data"=>"N/A","updated_data"=>"N/A");
-			$media->log_action($log_data); // Log admin action			
-			print json_encode(array("result"=>true));
-		}
+			if( copy_media($data) == true){				
+				$log_data = array("user"=>$_SESSION['username'],"action"=>"Media Copied to Archive Directory","object"=>$MediaID,"previous_data"=>"N/A","updated_data"=>"N/A");
+				$media->log_action($log_data); // Log admin action	
+				delete_media($data);
+				$media->delete($MediaID);
+				print json_encode(array("result"=>true));
+			}else{
+				print json_encode(array("result"=>false));
+			}
 		break;
 	case "get_home_list":
 		$folder = "";
@@ -127,16 +128,16 @@ switch($action){
 				$all_links = '<a href="'.$direct_link_to_file.'" target="_blank">'.$direct_link_to_file.'</a>';
 
 				$log_data = $mmlog->get_by_id($MediaID);
-				if( isset($log_data['Data_Blob']) ){
-					$data_blob = json_decode($log_data['Data_Blob']);
-					$all_links .= '<br/><br/>Original Filename: '. $data_blob->Original_Filename .'</a>';
+				if( isset($log_data['Updated_Data']) ){
+					$data_blob = json_decode($log_data['Updated_Data']);
+					$all_links .= '<br/><br/>Original Filename: '. $data_blob->original_filename .'</a>';
 				}
 				
 				//$all_links = '<a href="'.$direct_link_to_file.'" target="_blank">'.$direct_link_to_file.'</a> ( CDN - Use This )<br/><br/>';
 				//$all_links .= '<a href="'.$public_link_to_file.'" target="_blank">'.$public_link_to_file.'</a> ( Special Relative Link )';
 				$last_modified = date("m/d/Y", strtotime($CreatedDateTime)); // friendly date and time format
 				
-				$all_media[] = array("DT_RowId"=>$MediaID,"Title"=>$Title,"Category"=>$Category,"Description"=>$Description,"LinkToFile"=>$all_links,"LastModified"=>$last_modified,"Tags"=>$Tags,"ActionDelete"=>"Archive","ActionEdit"=>"Edit","Folder"=>ucfirst($Folder));
+				$all_media[] = array("DT_RowId"=>$MediaID,"Title"=>$Title,"Category"=>$Category,"Description"=>$Description,"LinkToFile"=>$all_links,"LastModified"=>$last_modified,"Tags"=>$Tags,"ActionDelete"=>"Archive","ActionEdit"=>"Edit","Folder"=>ucfirst($Folder),"Group"=>$Group);
 			}
 			print json_encode(array("data"=>$all_media));		
 		}else{
@@ -160,7 +161,7 @@ switch($action){
 	case "add":
 
 			if($_FILES){
-				$valid_extensions = array('jpeg', 'jpg', 'png', 'gif', 'bmp' , 'pdf' , 'doc' , 'ppt','tiff','zip','csv','xls','xlsx','sql','txt','gz'); // valid extensions
+				$valid_extensions = array('jpeg', 'jpg', 'png', 'gif', 'bmp' , 'pdf' , 'doc', 'docx' , 'ppt','tiff','zip','csv','xls','xlsx','sql','txt','gz'); // valid extensions
 
 				if(!empty($_POST['name']) || !empty($_POST['email']) || $_FILES['file_upload']){
 					$uploaded_filename = $_FILES['file_upload']['name'];
@@ -185,13 +186,6 @@ switch($action){
 							$result = $media->add($_POST);
 							
 							if( $result['result'] === true){
-
-								
-								$log_data = array("user"=>$_SESSION['username'],"action"=>"Add new media","object"=>$result['MediaID'],"previous_data"=>"N/A","updated_data"=>$file_mime_type);
-								$log_data['Original_Filename'] = $uploaded_filename;
-								$log_data['data_blob'] = json_encode($log_data);
-								$media->log_action($log_data); // Log admin action
-
 								
 								$title_temp = strtolower($_POST['Title']);
 								$title_temp = preg_replace('/[^a-zA-Z0-9\']/', '-', $title_temp); // remove special characters
@@ -213,11 +207,21 @@ switch($action){
 									$azure_upload_result = $blobClient->createBlockBlob($containerName, $azure_filename, $content);	
 									$result['direct_url'] =  DIRECT_TO_FILE_URL . $containerName . "/" . $azure_filename ;
 									$result['processed_url'] =  PROCESSED_URL . $seo_url ;
+									
+									$log_data = array("user"=>$_SESSION['username'],"action"=>"Add new media","object"=>$result['MediaID'],"previous_data"=>"N/A","updated_data"=>$file_mime_type);
+									$log_data['user'] = $_SESSION['username'];
+									$log_data['action'] = 'Add new media';
+									$log_data['previous_data'] = 'N/A';
+									$_POST['original_filename'] = $uploaded_filename;
+									$_POST['saved_media'] = $azure_filename;
+									$log_data['updated_data'] = json_encode($_POST);
+									$media->log_action($log_data); // Log admin action
+								
 									print json_encode($result);
 								}catch( ServiceException $e ){
 									// Archive the Media record just so that it is not visible within dashboard
 									$media->delete($result['MediaID']);
-									//print_r($e->getMessage());
+
 									$error_message = 'Media attempted to store in Azure Blob Storage: ' . $azure_filename. "\r\n";
 									$error_message .= 'Container to be used: ' . $containerName. "\r\n";
 									$error_message .= "Error returned by Azure Blob Storage: \r\n";
@@ -267,21 +271,54 @@ switch($action){
 	case "get_containers":
 		
 		break;
+	case "get_log_data":
+		$log_entries[] = array("Date"=>'Date Entered',"Action"=>'Action Taken',"Object"=>'Object or Item ID',"Previous Data"=>'Previous Data if applicable',"Updated Data"=>'if applicable, the data that was changed');
+		print json_encode(array("data"=>$log_entries));
+		break;
 
 }
 
 // copy blob from one container to another
 function copy_media($data){
 	global $blobClient;
+	global $media;
 	extract($data);
-	$blobClient->copyBlob($destination_container,$destination_blob, $source_container, $source_blob);
+	$source_blob_location = $source_container . '/' . $source_blob;
+	$destination_blob_location = $destination_container . '/' . $destination_blob;
+	
+	try{
+		$blobClient->copyBlob($destination_container,$destination_blob, $source_container, $source_blob);
+		$message = $source_blob_location . ' copied to ' . $destination_blob_location;
+		$log_data = array("user"=>$_SESSION['username'],"action"=>"Copy blob successful during archive","object"=>$destination_blob,"previous_data"=>"N/A","updated_data"=>$message);
+		$media->log_action($log_data); // Log admin action			
+		return true;
+	}catch( ServiceException $e ){
+		$message = $source_blob_location . ' could no be copied to ' . $destination_blob_location;
+		$message .= "\r\n" . $e->getErrorText();
+		$log_data = array("user"=>$_SESSION['username'],"action"=>"Copy blob failed during archive","object"=>$destination_blob,"previous_data"=>"N/A","updated_data"=>$message);
+		$media->log_action($log_data); // Log admin action			
+		return false;
+	}
+	//$result = $blobClient->copyBlob($destination_container,$destination_blob, $source_container, $source_blob);
+	//print_r($result);
+	//[_etag:MicrosoftAzure\Storage\Blob\Models\CopyBlobResult:private]
+	//print_r($result->_etag:MicrosoftAzure\Storage\Blob\Models\CopyBlobResult:private);
+	//print_r($result->_etag);
+	
+	//print_r($result->_Etag);
 }
 
 // delete blob
 function delete_media($data){
 	global $blobClient;
 	extract($data);
-	$blobClient->deleteBlob($source_container, $source_blob);
+	try{
+		$blobClient->deleteBlob($source_container, $source_blob);
+		return true;
+	}catch( ServiceException $e ){
+		//print($e->getErrorText());
+	}
+	//$blobClient->deleteBlob($source_container, $source_blob);
 }
 
 // Calculate difference between given timestamp and current timestamp
