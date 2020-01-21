@@ -17,14 +17,14 @@ if( $_SERVER['SERVER_NAME'] == "charlie.coherent.com" ){
     <link href="../_admin_mm/includes/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
     <link href="../_admin_mm/includes/css/Site.css" rel="stylesheet" type="text/css" />
     <link href="../_admin_mm/includes/css/themes/base/all.css" rel="stylesheet" />  
-	<!--<link href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.min.css" />-->
+	<link href="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/css/selectize.min.css" />
 
     <link rel="stylesheet" type="text/css" href="<?php print DIRECT_TO_FILE_URL; ?>/assets/js/datatables/datatables.min.css" />
 
     <script src="../_admin_mm/includes/js/jquery-3.3.1.min.js"></script>
     <script src="../_admin_mm/includes/js/jquery-ui-1.12.1.min.js"></script>
     <script src="../_admin_mm/includes/js/modernizr-2.6.2.js"></script>
-	<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.js" /></script>-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/selectize.js/0.12.6/js/standalone/selectize.js" /></script>
     <meta name="description" content="The description of my page" />
 </head>
 <body>
