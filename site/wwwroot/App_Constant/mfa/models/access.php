@@ -84,7 +84,7 @@ class Access extends Database {
 		//$stmt->bindValue(':category',$category, PDO::PARAM_STR);
 		$stmt->execute();
 		$result = $stmt->fetch(PDO::FETCH_ASSOC); 
-		//print_r($result);
+
 		if( count($result) > 0 ){
 			
 			// check to see if access_granted_datetime was less than 24 hours ago
@@ -97,11 +97,6 @@ class Access extends Database {
 				return true;
 			}
 		}
-		/*
-		$stmt->execute();
-		$number_of_rows = $stmt->fetchColumn();
-		return $number_of_rows;
-		*/
 					
 	}
 
