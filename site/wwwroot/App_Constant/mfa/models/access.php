@@ -75,7 +75,6 @@ class Access extends Database {
 	public function verify_auth($data){
 		extract($data);
 		$user_ip = $_SERVER['REMOTE_ADDR'];
-		//$query = "SELECT `access_ip`,`access_uuid_1`,`category`,`access_granted_datetime` FROM `".$this->portal_access."` WHERE `access_ip` = :access_ip AND `access_uuid_1` = :access_uuid_1 AND `category` = :category";
 		$query = "SELECT `access_ip`,`access_uuid_1`,`category`,`access_granted_datetime` FROM `".$this->portal_access."` WHERE `access_ip` = :access_ip AND `access_uuid_1` = :access_uuid_1";
 
 		$stmt = $this->conn->prepare($query);
