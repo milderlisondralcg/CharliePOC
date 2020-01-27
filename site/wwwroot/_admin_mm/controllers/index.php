@@ -71,7 +71,7 @@ switch($action){
 			if(!empty($_POST['name']) || !empty($_POST['email']) || $_FILES['file_upload'] || $_FILES['file_upload']['size'] > 0){
 				$uploaded_filename = $_FILES['file_upload']['name'];
 				$existing_filename = explode(".",$SavedMedia);
-
+				$media->update_lastfilename(array("MediaID"=>$MediaID,"LastFileName"=>$uploaded_filename));
 				// get uploaded file's extension
 				$ext = strtolower(pathinfo($uploaded_filename, PATHINFO_EXTENSION));
 				$final_filename = $existing_filename[0] . "." . $ext;
@@ -81,7 +81,7 @@ switch($action){
 				if(move_uploaded_file($tmp,$final_path)) {
 					$content = fopen($final_path, "r");
 					//Upload media asset to Azure Blob Storage
-					$azure_upload_result = $blobClient->createBlockBlob($Folder, $final_filename, $content);	
+					$azure_upload_result = $blobClient->createBlockBlob($Folder, $final_filename, $content);
 				}
 			}
 			if($result){
@@ -122,15 +122,19 @@ switch($action){
 		if( $result !== 0){
 			foreach( $result as $row){
 				extract($row);
-				
+
 				$direct_link_to_file = DIRECT_TO_FILE_URL . $Folder . "/" . $SavedMedia;
 				$public_link_to_file = PROCESSED_URL .  $SeoUrl;
 				$all_links = '<a href="'.$direct_link_to_file.'" target="_blank">'.$direct_link_to_file.'</a>';
 
-				$log_data = $mmlog->get_by_id($MediaID);
+/* 				$log_data = $mmlog->get_by_id($MediaID);
 				if( isset($log_data['Updated_Data']) ){
 					$data_blob = json_decode($log_data['Updated_Data']);
 					$all_links .= '<br/><br/>Original Filename: '. $data_blob->original_filename .'</a>';
+				} */
+				
+				if( isset($LastFilename) && (is_string($LastFilename)) ){
+					$all_links .= '<br/><br/>Last Filename Uploaded: '. $LastFilename . '</a>';
 				}
 				
 				//$all_links = '<a href="'.$direct_link_to_file.'" target="_blank">'.$direct_link_to_file.'</a> ( CDN - Use This )<br/><br/>';
@@ -216,7 +220,7 @@ switch($action){
 									$_POST['saved_media'] = $azure_filename;
 									$log_data['updated_data'] = json_encode($_POST);
 									$media->log_action($log_data); // Log admin action
-								
+									$media->update_lastfilename(array("MediaID"=>$result['MediaID'],"LastFileName"=>$uploaded_filename));
 									print json_encode($result);
 								}catch( ServiceException $e ){
 									// Archive the Media record just so that it is not visible within dashboard
