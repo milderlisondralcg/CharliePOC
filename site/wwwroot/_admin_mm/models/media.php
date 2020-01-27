@@ -8,6 +8,7 @@ class Media extends Database{
 	protected $media = "mm_media";
 	protected $media_attributes = "mm_media_attributes";
 	protected $media_tags = "mm_media_tags";
+	protected $media_last_filename = 'mm_last_filename';
 	protected $ts = 0;
 	
 	function __construct(){
@@ -46,7 +47,13 @@ class Media extends Database{
 					//$tags = implode( ", ",$this->get_media_tags($row['MediaID']) );
 					//$results[] = array("MediaID"=>$row['MediaID'],"Title"=>$row['Title'],"Category"=>$row['Category'],"Description"=>$row['Description'],"SavedMedia"=>$SavedMedia,"SeoUrl"=>$SeoUrl,"CreatedDateTime"=>$CreatedDateTime,"Tags"=>$tags,"Folder"=>$row['Folder']);
 				//}else{
-					$results[] = array("MediaID"=>$row['MediaID'],"Title"=>$row['Title'],"Category"=>$row['Category'],"Description"=>$row['Description'],"SavedMedia"=>$SavedMedia,"SeoUrl"=>$SeoUrl,"CreatedDateTime"=>$CreatedDateTime,"Tags"=>$Tags,"Folder"=>$Folder,"Type"=>$Type,"Group"=>$Group);
+				
+				$row['LastFilename'] = '';
+				$last_filename = $this->get_lastfilename($MediaID);
+				if( isset($last_filename) ){
+					$row['LastFilename'] = $last_filename;
+				} 
+					$results[] = array("MediaID"=>$row['MediaID'],"Title"=>$row['Title'],"Category"=>$row['Category'],"Description"=>$row['Description'],"SavedMedia"=>$SavedMedia,"SeoUrl"=>$SeoUrl,"CreatedDateTime"=>$CreatedDateTime,"Tags"=>$Tags,"Folder"=>$Folder,"Type"=>$Type,"Group"=>$Group,"LastFilename"=>$row['LastFilename']);
 				//}
 			}
 			return $results;
@@ -68,6 +75,10 @@ class Media extends Database{
 		$stmt->execute();	
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		if( count($result) > 0 ){
+			$last_filename = $this->get_lastfilename($MediaID);
+			if( isset($last_filename) ){
+				$result['LastFilename'] = $this->get_lastfilename($MediaID);
+			} 
 			return $result;
 		}else{
 			return 0;
@@ -441,10 +452,10 @@ class Media extends Database{
 	
 	private function check_title( $title, $MediaID = 0 ){
 		if( $MediaID != 0 ){
-			$stmt = $this->conn->prepare("SELECT COUNT(*) FROM `".$this->media."` WHERE Title=:Title AND `MediaID` <> :MediaID");
+			$stmt = $this->conn->prepare("SELECT COUNT(*) FROM `".$this->media."` WHERE Title=:Title AND `MediaID` <> :MediaID AND `Status` = 'Active'");
 			$stmt->bindParam(':MediaID',$MediaID, PDO::PARAM_INT);
 		}else{
-			$stmt = $this->conn->prepare("SELECT COUNT(*) FROM `".$this->media."` WHERE Title=:Title");	
+			$stmt = $this->conn->prepare("SELECT COUNT(*) FROM `".$this->media."` WHERE Title=:Title AND `Status`='Active'");	
 		}
 		
 		$stmt->bindParam(':Title',$title, PDO::PARAM_STR);
@@ -454,5 +465,48 @@ class Media extends Database{
 		
 	}
 	
+	/**
+	*
+	*/
+	public function get_groups(){
+
+		$query = "SELECT DISTINCT(t1.group) FROM `".$this->media."` t1 WHERE t1.group IS NOT NULL";
+		$stmt = $this->conn->prepare($query);	
+		$stmt->execute();
+		$results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		if( count($results) > 0 ){
+			return $results;
+		}else{
+			return 0;
+		}	
+	}
+	
+	/**
+	* Record the last filename uploaded for given Media ID
+	*/
+	public function update_lastfilename($data){
+		extract($data);
+		
+		$stmt = $this->conn->prepare("INSERT INTO `".$this->media_last_filename."` (MediaID,LastFileName) VALUES (:MediaID, :LastFileName)");
+		$stmt->bindParam(':MediaID',$MediaID, PDO::PARAM_INT);
+		$stmt->bindParam(':LastFileName',$LastFileName, PDO::PARAM_STR);
+		$stmt->execute();
+	}
+	
+	private function get_lastfilename($MediaID){
+		$query = "SELECT * FROM `".$this->media_last_filename."` WHERE `MediaID`=:MediaID ORDER BY `CreatedDateTime` DESC LIMIT 1";
+		$stmt = $this->conn->prepare($query);
+		$stmt->bindValue(':MediaID',$MediaID, PDO::PARAM_INT);		
+		$stmt->execute();
+		$result = $stmt->fetch(PDO::FETCH_ASSOC);
+		if( $stmt->rowCount() == 1 ){
+			return $result['LastFilename'];
+		}else{
+			return 0;
+		}		
+	}
+
+
+
 	
 }
