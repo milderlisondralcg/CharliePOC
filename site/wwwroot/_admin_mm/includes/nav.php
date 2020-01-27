@@ -8,7 +8,7 @@
                     </button>
 					<a href="add.php" class="navbar-brand">Add Media</a>
 					<a href="view_activity.php" class="navbar-brand">View Activity</a>
-					<a href="publish.php" class="navbar-brand">Publish JSON</a>
+					<a href="publish.php" class="navbar-brand">Publish Group Portal</a>
                 </div>
 
                 <div class="navbar-collapse collapse">
