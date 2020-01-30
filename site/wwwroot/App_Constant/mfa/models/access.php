@@ -15,11 +15,14 @@ class Access extends Database {
 	protected $check_key = "check_key";
 	
 
-	public function check_key($my_access_key){
+	public function check_key($data){
+		extract($data);
 
-		$query = "SELECT `access_key` , `active`, `id_portal_keys` FROM `".$this->portal_keys."` WHERE `access_key` = :Get_access_Key";
+		//$query = "SELECT `access_key` , `active`, `id_portal_keys` FROM `".$this->portal_keys."` WHERE `access_key` = :Get_access_Key";
+		$query = "SELECT `access_key` , `active`, `id_portal_keys` FROM `".$this->portal_keys."` WHERE `access_key` = :access_key AND `group`=:group";
 		$stmt = $this->conn->prepare($query);
-		$stmt-> bindValue(':Get_access_Key',trim($my_access_key), PDO::PARAM_STR);
+		$stmt-> bindValue(':access_key',trim($passcode), PDO::PARAM_STR);
+		$stmt-> bindValue(':group',strtolower(trim($group)), PDO::PARAM_STR);
 		$stmt-> execute();	
 		$result = $stmt->fetch(PDO::FETCH_ASSOC);
 		
@@ -75,12 +78,12 @@ class Access extends Database {
 	public function verify_auth($data){
 		extract($data);
 		$user_ip = $_SERVER['REMOTE_ADDR'];
-		$query = "SELECT `access_ip`,`access_uuid_1`,`category`,`access_granted_datetime` FROM `".$this->portal_access."` WHERE `access_ip` = :access_ip AND `access_uuid_1` = :access_uuid_1";
+		$query = "SELECT `access_ip`,`access_uuid_1`,`category`,`access_granted_datetime` FROM `".$this->portal_access."` WHERE `access_ip` = :access_ip AND `access_uuid_1` = :access_uuid_1 AND `category`=:category";
 
 		$stmt = $this->conn->prepare($query);
 		$stmt->bindValue(':access_ip',$user_ip, PDO::PARAM_STR);
 		$stmt->bindValue(':access_uuid_1',$access_uuid_1, PDO::PARAM_STR);
-		//$stmt->bindValue(':category',$category, PDO::PARAM_STR);
+		$stmt->bindValue(':category',$category, PDO::PARAM_STR);
 		$stmt->execute();
 		$result = $stmt->fetch(PDO::FETCH_ASSOC); 
 
