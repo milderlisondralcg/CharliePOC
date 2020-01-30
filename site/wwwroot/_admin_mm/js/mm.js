@@ -68,24 +68,8 @@ $(document).ready(function (e) {
 		$("#err").fadeOut();
 		$("#upload_notification").html("Processing...please standby");
 	   },
-	   success: function(data){ console.log(data.message);
+	   success: function(data){
 		   $("#upload_notification").html(data.message).fadeIn();
-		   /*
-			if(data.result == 'invalid'){
-			 // invalid file format.
-			 $("#upload_notification").html(data.message).fadeIn();
-			} else if(data.result == 'invalid file format'){
-				$("#upload_notification").html(data.message).fadeIn();
-			} else if(data.result == 'duplicate title') {
-				$("#upload_notification").html("There is already an entry with that Title.").fadeIn();
-			} else {
-			//$("#edit-media")[0].reset();
-			 
-			 var message = "";
-			 message = "Your changes have been saved<br>";
-			 $("#upload_notification").html(message);
-			}
-			*/
 		},
 		error: function(e){
 			$("#err").html(e).fadeIn();
