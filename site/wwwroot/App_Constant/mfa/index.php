@@ -24,8 +24,10 @@ if( isset($_POST['action']) ){
 switch($action){
 	case "validate_passcode":
 		$passcode = $_POST['passcode'];
-		$visitor_email = $_POST['email'];	
-		$result = $access->check_key($passcode);
+		$visitor_email = $_POST['email'];
+		$group = strtolower($_POST['group']);
+		//$result = $access->check_key($passcode,$group);
+		$result = $access->check_key($_POST);
 
 		if( $result === true){
 			// Add new record for user's email and given passcode
@@ -182,16 +184,15 @@ switch($action){
 		
 		$data['category'] = $_GET['category'];
 		$data['access_ip'] = $_SERVER['REMOTE_ADDR'];
-
 		$verify_auth_result = $access->verify_auth($data);
 
-
+		$template = 'customer_portal';
+			
 		if( $verify_auth_result == true){
 			try{
 				setcookie($cookie,$data['access_uuid_1'], time()+86400); // Set cookie
-				$template = 'group_portal';
+				//$template = 'group_portal';
 				$redirect_to_url = '/support/' . $template . '/' . strtolower(trim($_GET['category'])) . '/';				
-				//header("Location: /support/customer_portal/optoskand/");
 				header("Location: " . $redirect_to_url);
 			}catch(Exception $e){
 				$response['valid'] = false; 
@@ -210,6 +211,9 @@ switch($action){
 					$id = $_COOKIE["COHR-OPTOSKAND"];
 				}
 			} */			
+		}else{
+			$redirect_to_url = '/support/' . $template . '/' . strtolower(trim($_GET['category'])) . '/?invalid=1';
+			header("Location: " . $redirect_to_url);
 		}
 		
 		$response['valid'] = $valid;
