@@ -20,7 +20,7 @@ $groups = $media->get_groups();
 
         <div class="page-contents">
 		
-		<!--<input type="button" name="optoskand" id="optoskand" class="publish_button" value="Optoskand">-->
+		<input type="button" name="optoskand" id="optoskand" class="publish_button" value="Optoskand"><br/><br/>
 		
 	<?php
 		if($groups != 0){
@@ -54,11 +54,11 @@ $groups = $media->get_groups();
 			$.post(controller,{action:"publish",product_family:product_family});
 		});
 		
-		var group_controller = "../_admin_mm/controllers/group.php";
+		var group_controller = "../_admin_mm/controllers/business.php";
 		$( ".publish_group" ).on("click", function(){
 			console.log($(this).attr("id"));
 			product_group = $(this).attr("id");
-			$.post(group_controller,{action:"publish",product_group:product_group});
+			$.post(group_controller,{action:"publish",product_group:product_group,type:"group"});
 		});	  
 	</script>
 
