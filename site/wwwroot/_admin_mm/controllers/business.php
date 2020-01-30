@@ -12,11 +12,19 @@ function mmAutoloader($className){
 $media = new Media(); // media models/
 $data = array();
 $action = $_REQUEST['action'];
+
 switch($action){
 	case "publish":
 	case "get_business":
-		$product_family = trim($_POST['product_family']);
-		$result = $media->get_media_by_folder($product_family);		
+		if(isset($_REQUEST['type'])){
+			$product_group = strtolower(trim($_POST['product_group']));
+			$result = $media->get_by_group($product_group);	
+		}else{
+			$product_family = trim($_POST['product_family']);
+			$result = $media->get_media_by_folder($product_family);				
+		}
+		//$product_family = trim($_POST['product_family']);
+		//$result = $media->get_media_by_folder($product_family);		
 		$data = array();
 		$MimeType = "";
 		foreach($result as $key=>$value){
@@ -124,6 +132,7 @@ $html_output .='
 			}
 			
 			$url_download = 'https://content.coherent.com/optoskand/' . $SeoUrl;
+			$url_download = 'https://content.coherent.com/' . $Folder . '/' . $SeoUrl;
 							
 			$html_output .= '<div class="resource-container" style="display: none;">
 				<div class="clear"></div>
@@ -154,7 +163,12 @@ $html_output .='
 				
 		$dest_directory = "../../App_Constant/";
 		//$filename = "optoskand.html";
-		$filename = $product_family . ".html";
+		if(isset($_REQUEST['type'])){
+			$filename = $product_group . ".html";
+		}else{
+			$filename = $product_family . ".html";
+		}
+		//$filename = $product_family . ".html";
 		$dest_path = $dest_directory .  $filename;
 		$handle = fopen($dest_path, 'w') or die('Cannot open file:  '.$dest_path);
 		//$string_to_write = json_encode($data);
